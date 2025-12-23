@@ -66,7 +66,6 @@ jobs:
           dotnet restore Kr.Carevo.UMR.Infrastructure/*.csproj
           dotnet restore Kr.Carevo.UMR.Persistence/*.csproj
           dotnet restore Kr.Carevo.UMR.Application/*.csproj
-          dotnet restore Kr.Carevo.UMR.Adapter/*.csproj
           dotnet restore Kr.Carevo.UMR.Api/*.csproj
           dotnet restore Tests/Kr.Carevo.UMR.UnitTests/*.csproj
 
