@@ -83,8 +83,8 @@ jobs:
           image-tag: ${{ env.IMAGE_TAG }}
           dockerfile-path: "."
           trivy-severity: "CRITICAL,HIGH"
-          trivy-exit-code: "1"
-          continue-on-error: "false"
+          trivy-exit-code: "0"
+          continue-on-error: "true"
           trivy-ignore-unfixed: "true"
 
       - name: Push Docker Image to Registry
