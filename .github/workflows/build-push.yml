@@ -95,4 +95,4 @@ jobs:
           registry-url: ${{ env.REGISTRY_URL }}
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-token: ${{ secrets.REGISTRY_TOKEN }}
-          registry-source: ${{ env.REGISTRY_URL }}/${{ secrets.REGISTRY_GROUP }}/${{ github.event.repository.name }}
+          registry-source: ${{ env.REGISTRY_URL }}/${{ secrets.REGISTRY_GROUP }}/${{ steps.image-name.outputs.image-name }}
