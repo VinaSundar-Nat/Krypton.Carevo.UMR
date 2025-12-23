@@ -1,0 +1,40 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Build output
+**/bin/
+**/obj/
+**/out/
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test results
+TestResults/
+*.trx
+
+# NuGet packages (will be restored)
+*.nupkg
+*.snupkg
+packages/
+
+# Documentation
+*.md
+README*
+LICENSE*
+
+# CI/CD
+.github/
+
+# Docker
+Dockerfile*
+.dockerignore
+docker-compose*

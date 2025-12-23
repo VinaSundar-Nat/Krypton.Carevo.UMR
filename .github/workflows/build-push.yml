@@ -1,0 +1,99 @@
+name: Build, Test, Scan and Push
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      image_name:
+        description: "Image Name (e.g., MediaRecorder)"
+        required: false
+        type: string
+      image_tag:
+        description: "Image Tag (e.g., latest)"
+        required: false
+        type: string
+
+env:
+  DOTNET_VERSION: "10.0"
+  REGISTRY_URL: ${{ vars.REGISTRY_URL }}
+  IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
+
+jobs:
+  build-test-scan-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set image name (replace dots with underscores in repo name)
+      - name: Set Image Name
+        id: image-name
+        run: |
+          if [ -n "${{ github.event.inputs.image_name }}" ]; then
+            IMAGE_NAME="${{ github.event.inputs.image_name }}"
+          else
+            IMAGE_NAME="${{ github.event.repository.name }}"
+          fi
+          # Replace dots with underscores and convert to lowercase
+          IMAGE_NAME=$(echo "$IMAGE_NAME" | tr '.' '_' | tr '[:upper:]' '[:lower:]')
+          echo "image-name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "Using image name: $IMAGE_NAME"
+
+      # Checkout private CICD repository (required for private repos only)
+      - name: Checkout CICD Actions Repository
+        uses: actions/checkout@v4
+        with:
+          repository: VinaSundar-Nat/Krypton.CICD
+          token: ${{ secrets.CICD_REPO_PAT }}
+          path: .github/cicd-actions
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore Kr.Carevo.UMR.Domain/*.csproj
+          dotnet restore Kr.Carevo.UMR.Infrastructure/*.csproj
+          dotnet restore Kr.Carevo.UMR.Persistence/*.csproj
+          dotnet restore Kr.Carevo.UMR.Application/*.csproj
+          dotnet restore Kr.Carevo.UMR.Adapter/*.csproj
+          dotnet restore Kr.Carevo.UMR.Api/*.csproj
+          dotnet restore Tests/Kr.Carevo.UMR.UnitTests/*.csproj
+
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test Tests/Kr.Carevo.UMR.UnitTests/*.csproj --configuration Release --no-build --verbosity normal
+
+      - name: Build and Scan Docker Image
+        uses: ./.github/cicd-actions/actions/run-trivy-image-scan
+        with:
+          image-name: ${{ steps.image-name.outputs.image-name }}
+          image-tag: ${{ env.IMAGE_TAG }}
+          dockerfile-path: "."
+          trivy-severity: "CRITICAL,HIGH"
+          trivy-exit-code: "1"
+          continue-on-error: "false"
+          trivy-ignore-unfixed: "true"
+
+      - name: Push Docker Image to Registry
+        if: success() && github.event_name == 'push'
+        uses: ./.github/cicd-actions/actions/docker-push
+        with:
+          image-name: ${{ steps.image-name.outputs.image-name }}
+          image-tag: ${{ env.IMAGE_TAG }}
+          registry-url: ${{ env.REGISTRY_URL }}
+          registry-username: ${{ secrets.REGISTRY_USERNAME }}
+          registry-token: ${{ secrets.REGISTRY_TOKEN }}
+          registry-source: ${{ env.REGISTRY_URL }}/${{ secrets.REGISTRY_GROUP }}/${{ github.event.repository.name }}

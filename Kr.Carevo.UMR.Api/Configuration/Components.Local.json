@@ -1,0 +1,10 @@
+﻿{
+  "Service": {
+    "SampleService":{
+      "BaseUrl": "https://localhost:5001/api/sample",
+      "Timeout": 30,
+      "RetryCount": 3
+    }
+  }
+}
+

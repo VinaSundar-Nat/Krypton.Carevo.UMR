@@ -1,0 +1,6 @@
+@Kr.Carevo.UMR.Api_HostAddress = http://localhost:5138
+
+GET {{Kr.Carevo.UMR.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
