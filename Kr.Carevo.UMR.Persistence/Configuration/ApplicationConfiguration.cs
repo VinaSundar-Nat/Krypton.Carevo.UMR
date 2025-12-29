@@ -25,7 +25,7 @@ public sealed class ApplicationConfiguration : IEntityTypeConfiguration<Applicat
         builder.Property(a => a.JobId).HasColumnType("integer").IsRequired();
         builder.Property(a => a.Status).HasColumnType("varchar(50)").IsRequired();
         builder.Property(a => a.AppliedDate).HasColumnType("timestamp").IsRequired();
-        builder.Property(a => a.Notes).HasColumnType("varchar(max)").IsRequired(false);
+        builder.Property(a => a.Notes).HasColumnType("varchar").IsRequired(false);
 
         // Foreign key to User
         builder.HasOne(a => a.User)

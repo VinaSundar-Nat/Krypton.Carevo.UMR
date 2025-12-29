@@ -25,8 +25,8 @@ public sealed class EmploymentConfiguration : IEntityTypeConfiguration<Employmen
         builder.Property(e => e.Company).HasColumnType("varchar(500)").IsRequired();
         builder.Property(e => e.StartDate).HasColumnType("timestamp").IsRequired();
         builder.Property(e => e.EndDate).HasColumnType("timestamp").IsRequired(false);
-        builder.Property(e => e.Logo).HasColumnType("varchar(max)").IsRequired(false);
-        builder.Property(e => e.Url).HasColumnType("varchar(max)").IsRequired(false);
+        builder.Property(e => e.Logo).HasColumnType("varchar").IsRequired(false);
+        builder.Property(e => e.Url).HasColumnType("varchar").IsRequired(false);
 
         // Foreign key to User
         builder.HasOne(e => e.User)

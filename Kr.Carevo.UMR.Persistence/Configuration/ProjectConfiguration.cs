@@ -23,7 +23,7 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .IsRequired(false);
 
         builder.Property(p => p.Title).HasColumnType("varchar(500)").IsRequired();
-        builder.Property(p => p.Description).HasColumnType("varchar(max)").IsRequired();
+        builder.Property(p => p.Description).HasColumnType("varchar").IsRequired();
 
         // Foreign key to Employment (optional)
         builder.HasOne(p => p.Employment)
