@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Kr.Carevo.UMR.Api.Infra;
-using KR.Document.HB.Api;
+using Kr.Carevo.UMR.Api.Infra.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseExceptionHandler();
-app.SampleEndpoints();
+app.HealthCheckEndpoints();
+app.UserRegistrationEndpoints();
 
 app.Run();

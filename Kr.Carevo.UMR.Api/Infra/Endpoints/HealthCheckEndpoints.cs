@@ -8,7 +8,7 @@ namespace Kr.Carevo.UMR.Api.Infra.Endpoints;
 
 public static partial class ApiEndpoints
 {
-    public static void HealthCheckEndpoints(this WebApplication app){
+    public static void HealthCheckEndpoints(this IEndpointRouteBuilder app){
         app.MapGroup("/api/health/v1");
         
         app.MapGet("/verify",(CancellationToken token = default ) =>{
