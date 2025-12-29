@@ -9,10 +9,14 @@ namespace Kr.Carevo.UMR.Api.Infra.Endpoints;
 
 public static partial class ApiEndpoints
 {
-    public static void UserRegistrationEndpoints(this WebApplication app)
+    public static void UserRegistrationEndpoints(this IEndpointRouteBuilder app)
     {
-        var sampleGroup = app.MapGroup("/api/user/register/v1");
-        sampleGroup.MapPost("/", async ([FromBody] UserDto user,[AsParameters] ApiHeaders request, 
+        var sampleGroup = app.MapGroup("/api/user/v1");
+        sampleGroup.MapPost("/register",
+        [ProducesResponseType<ApiSuccessResponse<int?>>(StatusCodes.Status200OK, "application/json")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+         async ([FromBody] UserDto user,[AsParameters] ApiHeaders request, 
                 HttpContext context,
                 [FromServices] IUserRegistrationFeature userRegistrationFeature,
                 CancellationToken token = default) =>
@@ -25,9 +29,6 @@ public static partial class ApiEndpoints
                 "user registration endpoint to test the api.",
                 "User Registration",
                 "Enterprise Carevo user operations."
-        ))
-        .Produces<ApiSuccessResponse<int?>>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status500InternalServerError)
-        .Produces(StatusCodes.Status400BadRequest);
+        ));
     }
 }
