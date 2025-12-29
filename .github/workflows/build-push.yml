@@ -25,6 +25,10 @@ env:
   REGISTRY_URL: ${{ vars.REGISTRY_URL }}
   IMAGE_TAG: ${{ github.event.inputs.image_tag || github.sha }}
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-test-scan-push:
     runs-on: ubuntu-latest
