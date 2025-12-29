@@ -9,6 +9,15 @@
   <ItemGroup>
     <ProjectReference Include="../Kr.Carevo.UMR.Domain/Kr.Carevo.UMR.Domain.csproj" />
     <ProjectReference Include="../Kr.Carevo.UMR.Infrastructure/Kr.Carevo.UMR.Infrastructure.csproj" />
+    <ProjectReference Include="../Kr.Carevo.UMR.Persistence/Kr.Carevo.UMR.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mapper/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" />
   </ItemGroup>
 
 </Project>

@@ -67,7 +67,8 @@
       "WithMachineName"
     ],
     "Properties": {
-      "Application": "Core Document"
+      "Application": "Carevo.UMR.Api",
+      "System": "UMR"
     }
   }
 }
