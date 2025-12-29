@@ -27,12 +27,12 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         // Owned entity: ResidentialAddress
         builder.OwnsOne(a => a.ResidentialAddress, e =>
         {
-            e.Property(a => a.Line1).IsRequired().HasColumnName("Address_Line1").HasColumnType("varchar(max)");
-            e.Property(a => a.Line2).HasColumnName("Address_Line2").HasColumnType("varchar(max)");
+            e.Property(a => a.Line1).IsRequired().HasColumnName("Address_Line1").HasColumnType("varchar").IsRequired();
+            e.Property(a => a.Line2).HasColumnName("Address_Line2").HasColumnType("varchar");
             e.Property(a => a.Suburb).HasColumnName("Address_Suburb").HasColumnType("varchar(200)");
-            e.Property(a => a.City).IsRequired().HasColumnName("Address_City").HasColumnType("varchar(150)");
-            e.Property(a => a.State).IsRequired().HasColumnName("Address_State").HasColumnType("varchar(200)");
-            e.Property(a => a.PostCode).IsRequired().HasColumnName("Address_PostCode").HasColumnType("varchar(20)");
+            e.Property(a => a.City).IsRequired().HasColumnName("Address_City").HasColumnType("varchar(150)").IsRequired();
+            e.Property(a => a.State).IsRequired().HasColumnName("Address_State").HasColumnType("varchar(200)").IsRequired();
+            e.Property(a => a.PostCode).IsRequired().HasColumnName("Address_PostCode").HasColumnType("varchar(20)").IsRequired();
         });
 
         // Owned collection: Contacts (one-to-many, separate table)

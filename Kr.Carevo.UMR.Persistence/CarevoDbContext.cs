@@ -18,6 +18,8 @@ public class CarevoDbContext(DbContextOptions<CarevoDbContext> options,
     public DbSet<Application> Applications { get; set; }
     public DbSet<ApplicationStatusHistory> ApplicationStatusHistories { get; set; }
     public DbSet<Streak> ActivityStreaks { get; set; }
+    public DbSet<UserSkill> UserSkills { get; set; }
+    public DbSet<ProjectSkill> ProjectSkills { get; set; }
 
     public override Task NotifyChanges()
     {

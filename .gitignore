@@ -411,4 +411,5 @@ ASALocalRun/
 .volume/
 .cert/.files/
 Kr.Common
+*/Migrations
 

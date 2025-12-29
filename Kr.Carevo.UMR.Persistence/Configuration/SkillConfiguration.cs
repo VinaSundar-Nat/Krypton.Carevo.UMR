@@ -23,7 +23,7 @@ public sealed class SkillConfiguration : IEntityTypeConfiguration<Skill>
             .IsRequired(false);
 
         builder.Property(s => s.Code).HasColumnName("code").HasColumnType("varchar(100)").IsRequired();
-        builder.Property(s => s.Description).HasColumnName("description").HasColumnType("varchar(max)").IsRequired();
+        builder.Property(s => s.Description).HasColumnName("description").HasColumnType("varchar").IsRequired();
         builder.Property(s => s.EffectiveDate).HasColumnName("effective_date").HasColumnType("timestamp").IsRequired();
 
         // Many-to-many with User via UserSkill join entity
