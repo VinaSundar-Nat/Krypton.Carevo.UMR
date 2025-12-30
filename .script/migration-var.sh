@@ -1,3 +1,6 @@
 script=false
+sqlscript=true
+netmigrate=true
 apply=true
-migrationName="InitialCommit"
+migrationName="UMRMigration_Initial"
+versionSuffix="1_0_2"

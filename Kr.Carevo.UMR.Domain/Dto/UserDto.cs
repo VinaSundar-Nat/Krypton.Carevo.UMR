@@ -2,7 +2,7 @@ using System;
 
 namespace Kr.Carevo.UMR.Domain.Dto;
 
-public class UserDto
+public sealed class UserDto
 {
     public int? Id { get; init; }
 

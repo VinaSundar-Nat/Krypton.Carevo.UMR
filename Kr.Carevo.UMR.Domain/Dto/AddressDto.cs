@@ -1,6 +1,6 @@
+namespace Kr.Carevo.UMR.Domain.Dto;
 
-
-public class AddressDto
+public sealed class AddressDto
 {
     public required string Line1 { get; set; }
 
@@ -13,4 +13,7 @@ public class AddressDto
     public required string State { get; set; }
 
     public required string PostCode { get; set; }
+    public required string Country { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
 }

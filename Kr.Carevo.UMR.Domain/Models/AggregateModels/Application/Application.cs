@@ -16,7 +16,7 @@ public enum ApplicationStatus
     Archived
 }
 
-public class Application : BaseEntity<Application>, IAggregateRoot
+public sealed class Application : BaseEntity<Application>, IAggregateRoot
 {
     public int JobId { get; private set; }
     public bool IsActive => Status != ApplicationStatus.Rejected && Status != ApplicationStatus.Withdrawn;

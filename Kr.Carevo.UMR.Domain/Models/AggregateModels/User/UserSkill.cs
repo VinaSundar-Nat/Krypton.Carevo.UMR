@@ -1,6 +1,6 @@
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class UserSkill
+public sealed class UserSkill
 {
     public int UserId { get; set; }
     public User? User { get; set; }

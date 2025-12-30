@@ -4,6 +4,8 @@ using Kr.Common.Infrastructure.Datastore;
 
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
+public record Coordinates(double Latitude, double Longitude);
+
 public sealed class Address : BaseValueObject
 {
     public required string Line1 { get; set; }
@@ -12,7 +14,8 @@ public sealed class Address : BaseValueObject
     public required string City { get; set; }
     public required string State { get; set; }
     public required string PostCode { get; set; }
-
+    public required string Country { get; set; }
+    public Coordinates? Coordinates { get; set; } = null;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

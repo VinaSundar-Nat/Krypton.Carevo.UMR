@@ -12,7 +12,7 @@ public enum UserStatus
     Pending
 }
 
-public class User : BaseEntity<User>, IAggregateRoot
+public sealed class User : BaseEntity<User>, IAggregateRoot
 {
     public  string FirstName { get; private set; } = string.Empty!;
     public  string LastName { get; private set; } = string.Empty!;
@@ -41,12 +41,16 @@ public class User : BaseEntity<User>, IAggregateRoot
 
         ResidentialAddress = new Address
         {
-            Line1 = userDto.Address?.Line1!,
-            Line2 = userDto.Address?.Line2,
-            Suburb = userDto.Address?.Suburb,
-            City = userDto.Address?.City!,
-            State = userDto.Address?.State!,
-            PostCode = userDto.Address?.PostCode!
+            Line1 = userDto.Address!.Line1!,
+            Line2 = userDto.Address!.Line2,
+            Suburb = userDto.Address!.Suburb,
+            City = userDto.Address!.City!,
+            State = userDto.Address!.State!,
+            PostCode = userDto.Address!.PostCode!,
+            Country = userDto.Address!.Country!,
+            Coordinates = userDto.Address!.Latitude.HasValue && userDto.Address!.Longitude.HasValue
+                ? new Coordinates(userDto.Address!.Latitude.Value, userDto.Address!.Longitude.Value)
+                : null
         };
     }
 

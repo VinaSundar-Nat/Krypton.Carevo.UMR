@@ -1,6 +1,7 @@
 using Kr.Carevo.UMR.Domain.Models.AggregateModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NpgsqlTypes;
 using NpgsqlExt = Microsoft.EntityFrameworkCore.NpgsqlPropertyBuilderExtensions;
 //using SqlServerExt = Microsoft.EntityFrameworkCore.SqlServerPropertyBuilderExtensions;
 
@@ -24,6 +25,11 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
             .IsRequired(false);
 
+        builder.Property(u => u.FirstName).HasColumnType("varchar(200)").IsRequired();
+        builder.Property(u => u.LastName).HasColumnType("varchar(200)").IsRequired();
+        builder.Property(u => u.Dob).HasColumnType("timestamp").IsRequired();
+        builder.Property(u => u.Status).HasColumnType("smallint").HasConversion<int>().IsRequired();
+
         // Owned entity: ResidentialAddress
         builder.OwnsOne(a => a.ResidentialAddress, e =>
         {
@@ -33,6 +39,11 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             e.Property(a => a.City).IsRequired().HasColumnName("Address_City").HasColumnType("varchar(150)").IsRequired();
             e.Property(a => a.State).IsRequired().HasColumnName("Address_State").HasColumnType("varchar(200)").IsRequired();
             e.Property(a => a.PostCode).IsRequired().HasColumnName("Address_PostCode").HasColumnType("varchar(20)").IsRequired();
+            e.Property(a => a.Country).IsRequired().HasColumnName("Address_Country").HasColumnType("varchar(100)").IsRequired();
+            e.Property(a => a.Coordinates)
+                .HasColumnName("Address_Coordinates").HasColumnType("point").HasConversion(
+                    v => new NpgsqlPoint(v.Longitude, v.Latitude), 
+                    v => new Coordinates(v.Y, v.X));
         });
 
         // Owned collection: Contacts (one-to-many, separate table)

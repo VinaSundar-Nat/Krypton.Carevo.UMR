@@ -2,7 +2,7 @@ using Kr.Common.Infrastructure.Datastore;
 
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class Streak : BaseEntity<Streak>
+public sealed class Streak : BaseEntity<Streak>
 {
     public required DateTime ActivityDate { get; set; }
     public int ApplicationCount { get; private set; } = 0;
