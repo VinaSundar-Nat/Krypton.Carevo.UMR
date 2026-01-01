@@ -12,7 +12,7 @@ public static class Startup
     public static void ConfigurePersistence(this IServiceCollection services, IConfiguration configuration)
     {
          services.Configure<DbSettings>(configuration.GetSection("DataStore:Carevo"));
-         services.DbNpgContextPoolSettings<CarevoDbContext>(configuration, "DataStore:Carevo");
+         services.DbNpgContextPoolSettings<CarevoDbContext>(configuration, "DataStore:Carevo");        
          services.AddScoped<IUserRepository, UserRepository>();
     }
 }

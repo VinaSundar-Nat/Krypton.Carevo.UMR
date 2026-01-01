@@ -19,3 +19,18 @@ public sealed class UserDto
 
     public string Name { get; set; } = string.Empty;
 }
+
+public sealed class UserResponseDto
+{
+    public int Id { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required DateTime Dob { get; set; }
+    public string Name => $"{FirstName} {LastName}";
+    public required ContactDto Contact { get; set; } 
+    public required string Status { get; set; }
+    public IEnumerable<String> Skills { get; set; } = [];
+}
+
+
+

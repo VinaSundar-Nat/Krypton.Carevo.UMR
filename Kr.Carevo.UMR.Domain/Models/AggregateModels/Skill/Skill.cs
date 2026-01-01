@@ -31,6 +31,6 @@ public sealed class Skill : BaseEntity<Skill>, IAggregateRoot
 
         Code = skillDto.Code;
         Description = skillDto.Description;
-        EffectiveDate = skillDto.EffectiveDate;
+        EffectiveDate = skillDto.EffectiveDate ?? DateTime.UtcNow;
     }
 }
