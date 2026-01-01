@@ -17,14 +17,14 @@ public sealed class EmploymentConfiguration : IEntityTypeConfiguration<Employmen
 
         builder.HasKey(a => a.Id).HasName("pk_employments_Id");
         builder.Property(a => a.VersionStamp).IsRowVersion();
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("CreatedAt")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
             .IsRequired(false);
 
         builder.Property(e => e.Company).HasColumnType("varchar(500)").IsRequired();
-        builder.Property(e => e.StartDate).HasColumnType("timestamp").IsRequired();
-        builder.Property(e => e.EndDate).HasColumnType("timestamp").IsRequired(false);
+        builder.Property(e => e.StartDate).HasColumnType("timestamptz").IsRequired();
+        builder.Property(e => e.EndDate).HasColumnType("timestamptz").IsRequired(false);
         builder.Property(e => e.Logo).HasColumnType("varchar").IsRequired(false);
         builder.Property(e => e.Url).HasColumnType("varchar").IsRequired(false);
 

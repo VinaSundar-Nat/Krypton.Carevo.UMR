@@ -16,12 +16,12 @@ public sealed class ApplicationStatusHistoryConfiguration : IEntityTypeConfigura
             .ValueGeneratedOnAdd();
 
         builder.HasKey(a => a.Id).HasName("pk_application_status_history_Id");
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("CreatedAt")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
 
         builder.Property(h => h.Status).HasColumnType("varchar(50)").IsRequired();
         builder.Property(h => h.PreviousStatus).HasColumnType("varchar(50)").IsRequired(false);
-        builder.Property(h => h.StatusChangedDate).HasColumnType("timestamp").IsRequired();
+        builder.Property(h => h.StatusChangedDate).HasColumnType("timestamptz").IsRequired();
         builder.Property(h => h.Notes).HasColumnType("varchar").IsRequired(false);
         builder.Property(h => h.Reason).HasColumnType("varchar(500)").IsRequired(false);
         builder.Property(h => h.ChangedBy).HasColumnType("varchar(500)").IsRequired(false);

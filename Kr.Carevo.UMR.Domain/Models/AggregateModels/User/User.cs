@@ -12,22 +12,22 @@ public enum UserStatus
     Pending
 }
 
-public class User : BaseEntity<User>, IAggregateRoot
+public sealed class User : BaseEntity<User>, IAggregateRoot
 {
     public  string FirstName { get; private set; } = string.Empty!;
     public  string LastName { get; private set; } = string.Empty!;
     public DateTime Dob { get; private set; }
     public UserStatus Status { get; private set; } 
     public Address? ResidentialAddress { get; private set; }
-    public IList<Contact> Contacts { get; private set; } = [];
+    public ICollection<Contact> Contacts { get; private set; } = [];
     public ICollection<Skill> Skills { get; set; } =[];
     // Many-to-many relationships
-    public IList<UserSkill> UserSkills { get; private set; } = [];
-  
-    public IList<Employment> Employments { get; private set; } = [];
-    public IList<Project> IndividualProjects { get; private set; } = [];
-    public IList<Application> Applications { get; private set; } = [];
-    public IList<Streak> ActivityStreaks { get; private set; } = [];
+    public ICollection<UserSkill> UserSkills { get; private set; } = [];
+
+    public ICollection<Employment> Employments { get; private set; } = [];
+    public ICollection<Project> IndividualProjects { get; private set; } = [];
+    public ICollection<Application> Applications { get; private set; } = [];
+    public ICollection<Streak> ActivityStreaks { get; private set; } = [];
 
     public void CreateUser( UserDto userDto)
     {
@@ -41,13 +41,20 @@ public class User : BaseEntity<User>, IAggregateRoot
 
         ResidentialAddress = new Address
         {
-            Line1 = userDto.Address?.Line1!,
-            Line2 = userDto.Address?.Line2,
-            Suburb = userDto.Address?.Suburb,
-            City = userDto.Address?.City!,
-            State = userDto.Address?.State!,
-            PostCode = userDto.Address?.PostCode!
+            Line1 = userDto.Address!.Line1!,
+            Line2 = userDto.Address!.Line2,
+            Suburb = userDto.Address!.Suburb,
+            City = userDto.Address!.City!,
+            State = userDto.Address!.State!,
+            PostCode = userDto.Address!.PostCode!,
+            Country = userDto.Address!.Country!,
+            Coordinates = userDto.Address!.Latitude.HasValue && userDto.Address!.Longitude.HasValue
+                ? new Coordinates(userDto.Address!.Latitude.Value, userDto.Address!.Longitude.Value)
+                : null
         };
+
+        if (userDto.Contact.IsValid)
+            AddContact(userDto.Contact);
     }
 
     public void UpdateUserStatus( int UserId, UserStatus status)
@@ -60,26 +67,26 @@ public class User : BaseEntity<User>, IAggregateRoot
         Status = status;
     }
 
-    private static (ContactType type, string value) GetContactDetails(ContactDto contactDto) =>    
-    contactDto switch
+    private static IEnumerable<Contact> CreateContactsFromDto(ContactDto contactDto)
     {
-        { IsValid: true } when !string.IsNullOrWhiteSpace(contactDto.Email) => (ContactType.Email, contactDto.Email),
-        { IsValid: true } when !string.IsNullOrWhiteSpace(contactDto.PhoneNumber) => (ContactType.Phone, contactDto.PhoneNumber),
-        { IsValid: true } when !string.IsNullOrWhiteSpace(contactDto.MobileNumber) => (ContactType.Mobile, contactDto.MobileNumber),
-        _ => throw new ArgumentException("ContactDto does not contain a valid contact type.")
-    };
+        if (!string.IsNullOrWhiteSpace(contactDto.Email))
+            yield return new Contact { Type = ContactType.Email, Value = contactDto.Email };
 
-    public void AddContactIfNotExists(ContactDto contactDto)
+        if (!string.IsNullOrWhiteSpace(contactDto.PhoneNumber))
+            yield return new Contact { Type = ContactType.Phone, Value = contactDto.PhoneNumber };
+
+        if (!string.IsNullOrWhiteSpace(contactDto.MobileNumber))
+            yield return new Contact { Type = ContactType.Mobile, Value = contactDto.MobileNumber };
+    }
+
+    public void AddContact(ContactDto contactDto)
     {
-        var (type, value) = GetContactDetails(contactDto);
-        var newContact = new Contact { Type = type, Value = value };
+        var potentialContacts = CreateContactsFromDto(contactDto);
 
-        if (this.Contacts.Any(c => c.Equals(newContact)))
+        foreach (var contact in potentialContacts)
         {
-            throw new InvalidOperationException($"Contact of type '{type}' with value '{value}' already exists for this user.");
+            this.Contacts.Add(contact);
         }
-
-        this.Contacts.Add(newContact);
     }
 
     public void AddSkill(string code, string description, DateTime effectiveDate)

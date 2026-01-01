@@ -17,14 +17,14 @@ public sealed class ApplicationConfiguration : IEntityTypeConfiguration<Applicat
 
         builder.HasKey(a => a.Id).HasName("pk_applications_Id");
         builder.Property(a => a.VersionStamp).IsRowVersion();
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("CreatedAt")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
             .IsRequired(false);
 
         builder.Property(a => a.JobId).HasColumnType("integer").IsRequired();
         builder.Property(a => a.Status).HasColumnType("varchar(50)").IsRequired();
-        builder.Property(a => a.AppliedDate).HasColumnType("timestamp").IsRequired();
+        builder.Property(a => a.AppliedDate).HasColumnType("timestamptz").IsRequired();
         builder.Property(a => a.Notes).HasColumnType("varchar").IsRequired(false);
 
         // Foreign key to User

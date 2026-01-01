@@ -1,6 +1,32 @@
 @Kr.Carevo.UMR.Api_HostAddress = http://localhost:5138
 
-GET {{Kr.Carevo.UMR.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
 ###
+POST {{Kr.Carevo.UMR.Api_HostAddress}}/api/user/v1/register
+Content-Type: application/json
+Accept: application/json
+User-Agent: RestClient/1.0
+Authorization: Bearer your-token-here
+X-User: "System"
+X-Correlation-ID: {{$guid}}
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "dob": "1990-05-15T00:00:00Z",
+    "name": "John Doe",
+    "address": {
+        "line1": "123 Main St",
+        "suburb": "",
+        "city": "New York",
+        "state": "NY",
+        "postCode": "10001",
+        "country": "USA"
+    },
+    "contacts": [
+        {
+            "email": "john.doe@example.com",
+            "phoneNumber": "555-123-4567",
+            "mobileNumber": "555-987-6543"
+        }
+    ]
+}

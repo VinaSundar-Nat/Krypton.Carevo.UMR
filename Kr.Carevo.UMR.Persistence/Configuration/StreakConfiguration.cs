@@ -16,7 +16,7 @@ public sealed class StreakConfiguration : IEntityTypeConfiguration<Streak>
             .ValueGeneratedOnAdd();
 
         builder.HasKey(a => a.Id).HasName("pk_activity_streaks_Id");
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("CreatedAt")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
 
         builder.Property(s => s.ActivityDate).HasColumnType("date").IsRequired();

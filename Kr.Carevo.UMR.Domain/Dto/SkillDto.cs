@@ -1,6 +1,6 @@
 namespace Kr.Carevo.UMR.Domain.Dto;
 
-public class SkillDto
+public sealed class SkillDto
 {
     public int? Id { get; init; }
 

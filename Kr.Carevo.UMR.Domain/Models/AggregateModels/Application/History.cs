@@ -2,7 +2,7 @@ using Kr.Common.Infrastructure.Datastore;
 
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class ApplicationStatusHistory : BaseEntity<ApplicationStatusHistory>
+public sealed class ApplicationStatusHistory : BaseEntity<ApplicationStatusHistory>
 {
     public ApplicationStatus Status { get; set; }
     public ApplicationStatus? PreviousStatus { get; set; }

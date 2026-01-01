@@ -1,10 +1,11 @@
 using System;
+using MediatR;
 
 namespace Kr.Carevo.UMR.Domain.Dto;
 
-public class UserDto
+public sealed class UserDto
 {
-    public int? Id { get; init; }
+    public int? Id { get; set; }
 
     public required string FirstName { get; set; }
 
@@ -14,7 +15,7 @@ public class UserDto
 
     public AddressDto? Address { get; set; }
 
-    public IEnumerable<ContactDto> Contacts { get; set; } = [];
+    public required ContactDto Contact { get; set; }
 
     public string Name { get; set; } = string.Empty;
 }

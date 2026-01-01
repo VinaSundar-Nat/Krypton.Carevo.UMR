@@ -3,7 +3,7 @@ using Kr.Common.Infrastructure.Datastore.Interface;
 
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class Project : BaseEntity<Project>, IAggregateRoot
+public sealed class Project : BaseEntity<Project>, IAggregateRoot
 {
     public required string Title { get; set; }
     public required string Description { get; set; }

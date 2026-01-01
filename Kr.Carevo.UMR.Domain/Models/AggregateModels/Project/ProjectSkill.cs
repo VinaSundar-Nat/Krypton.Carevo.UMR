@@ -1,6 +1,6 @@
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class ProjectSkill
+public sealed class ProjectSkill
 {
     public int ProjectId { get; set; }
     public Project? Project { get; set; }

@@ -1,7 +1,8 @@
 ﻿using Kr.Carevo.UMR.Api.Infra.Helpers;
+using Kr.Carevo.UMR.Application.Feature.User.Command.Register;
 using Kr.Carevo.UMR.Domain.Dto;
-using Kr.Carevo.UMR.Domain.Ports;
 using Kr.Common.Infrastructure.Http.Models;
+using Kr.Common.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -13,20 +14,20 @@ public static partial class ApiEndpoints
     {
         var sampleGroup = app.MapGroup("/api/user/v1");
         sampleGroup.MapPost("/register",
-        [ProducesResponseType<ApiSuccessResponse<int?>>(StatusCodes.Status200OK, "application/json")]
+        [ProducesResponseType<ApiSuccessResponse<int?>>(StatusCodes.Status201Created, "application/json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
-         async ([FromBody] UserDto user,[AsParameters] ApiHeaders request, 
+         async ([FromBody] UserDto user,
                 HttpContext context,
-                [FromServices] IUserRegistrationFeature userRegistrationFeature,
+                [FromServices] IMediate mediate,
                 CancellationToken token = default) =>
         {
-            var registedUser = await userRegistrationFeature.Register(user);
-            return Results.Ok(new ApiSuccessResponse<int?> { StatusCode = 200, Url = context.Request.Path ,Data = registedUser?.Id });
+            var registedUser = await mediate.Send(new UserRegistrationCommand{ User = user }, token);
+            return TypedResults.Created($"/api/user/v1/{registedUser?.Id}");
         }).WithOpenApi(operation =>
             operation.GenerateOpenApiDoc(
                 "v1 user registration.",
-                "user registration endpoint to test the api.",
+                "user registration endpoint to test the api.",  
                 "User Registration",
                 "Enterprise Carevo user operations."
         ));

@@ -4,7 +4,7 @@ using Kr.Common.Infrastructure.Datastore.Interface;
 
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class Employment : BaseEntity<Employment>, IAggregateRoot
+public sealed class Employment : BaseEntity<Employment>, IAggregateRoot
 {
     public string Company { get; private set; } = string.Empty!;
     public DateTime StartDate { get; private set; }

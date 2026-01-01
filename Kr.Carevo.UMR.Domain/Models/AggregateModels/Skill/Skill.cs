@@ -4,7 +4,7 @@ using Kr.Common.Infrastructure.Datastore.Interface;
 
 namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
-public class Skill : BaseEntity<Skill>, IAggregateRoot
+public sealed class Skill : BaseEntity<Skill>, IAggregateRoot
 {
     public required string Code { get; set; }
     public required string Description { get; set; }
