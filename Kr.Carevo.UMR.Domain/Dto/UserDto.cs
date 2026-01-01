@@ -1,10 +1,11 @@
 using System;
+using MediatR;
 
 namespace Kr.Carevo.UMR.Domain.Dto;
 
 public sealed class UserDto
 {
-    public int? Id { get; init; }
+    public int? Id { get; set; }
 
     public required string FirstName { get; set; }
 

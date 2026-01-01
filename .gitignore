@@ -412,4 +412,5 @@ ASALocalRun/
 .cert/.files/
 Kr.Common
 */Migrations
+Kr.Carevo.UMR.Application/Common/
 

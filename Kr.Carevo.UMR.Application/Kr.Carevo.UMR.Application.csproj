@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" />
+    <PackageReference Include="FluentValidation" />
   </ItemGroup>
 
 </Project>
