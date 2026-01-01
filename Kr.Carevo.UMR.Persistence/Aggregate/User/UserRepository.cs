@@ -21,4 +21,14 @@ public class UserRepository(ILogger<UserRepository> logger, CarevoDbContext dbCo
         user.Id = entity.Id;
         return user;
     }
+
+    public async Task<bool> ExistsByContactAsync(string contactValue, CancellationToken cancellationToken = default)
+    {
+        return await DBset
+            .AsNoTracking()
+            .SelectMany(u => u.Contacts)  
+            .AnyAsync(c => c.Value == contactValue, cancellationToken);    
+    }
+
+  
 }

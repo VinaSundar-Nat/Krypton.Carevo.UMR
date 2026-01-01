@@ -15,7 +15,7 @@ public sealed class UserDto
 
     public AddressDto? Address { get; set; }
 
-    public IEnumerable<ContactDto> Contacts { get; set; } = [];
+    public required ContactDto Contact { get; set; }
 
     public string Name { get; set; } = string.Empty;
 }

@@ -17,7 +17,7 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
 
         builder.HasKey(a => a.Id).HasName("pk_projects_Id");
         builder.Property(a => a.VersionStamp).IsRowVersion();
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("CreatedAt")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
             .IsRequired(false);

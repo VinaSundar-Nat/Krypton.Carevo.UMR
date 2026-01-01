@@ -3,4 +3,4 @@ sqlscript=true
 netmigrate=true
 apply=true
 migrationName="UMRMigration_Initial"
-versionSuffix="1_0_2"
+versionSuffix="1_0_6"

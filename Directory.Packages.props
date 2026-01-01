@@ -44,8 +44,8 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="10.0.0" /> 
 
-    
-    <PackageVersion Include="Krypton.Common" Version="1.1.5" />
+
+    <PackageVersion Include="Krypton.Common" Version="1.1.7" />
     <PackageVersion Include="AutoMapper" Version="16.0.0" />
     <PackageVersion Include="FluentValidation" Version="11.10.0" />
   </ItemGroup>

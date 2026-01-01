@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace Kr.Carevo.UMR.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UMRMigration_Initial_1_0_2_20251230133459 : Migration
+    public partial class UMRMigration_Initial_1_0_6_20260101183207 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,8 +58,8 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     id = table.Column<int>(type: "integer", nullable: false),
                     code = table.Column<string>(type: "varchar(100)", nullable: false),
                     description = table.Column<string>(type: "varchar", nullable: false),
-                    effective_date = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    effective_date = table.Column<DateTime>(type: "timestamptz", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     created_by = table.Column<string>(type: "varchar(500)", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
@@ -76,7 +76,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false),
                     FirstName = table.Column<string>(type: "varchar(200)", nullable: false),
                     LastName = table.Column<string>(type: "varchar(200)", nullable: false),
-                    Dob = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    Dob = table.Column<DateTime>(type: "timestamptz", nullable: false),
                     Status = table.Column<short>(type: "smallint", nullable: false),
                     Address_Line1 = table.Column<string>(type: "varchar", nullable: true),
                     Address_Line2 = table.Column<string>(type: "varchar", nullable: true),
@@ -86,13 +86,13 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     Address_PostCode = table.Column<string>(type: "varchar(20)", nullable: true),
                     Address_Country = table.Column<string>(type: "varchar(100)", nullable: true),
                     Address_Coordinates = table.Column<NpgsqlPoint>(type: "point", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_Users_Id", x => x.Id);
+                    table.PrimaryKey("pk_users_Id", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,7 +105,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     ApplicationCount = table.Column<int>(type: "integer", nullable: false),
                     ConsecutiveDayCount = table.Column<int>(type: "integer", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     VersionStamp = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -129,11 +129,11 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false),
                     JobId = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
-                    AppliedDate = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    AppliedDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
                     Notes = table.Column<string>(type: "varchar", nullable: true),
                     PersonalizedEmploymentData = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
@@ -156,12 +156,12 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
                     Company = table.Column<string>(type: "varchar(500)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamptz", nullable: true),
                     Logo = table.Column<string>(type: "varchar", nullable: true),
                     Url = table.Column<string>(type: "varchar", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
@@ -182,20 +182,20 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    type = table.Column<string>(type: "varchar(50)", nullable: false),
-                    value = table.Column<string>(type: "varchar(500)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Value = table.Column<string>(type: "varchar(500)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     VersionStamp = table.Column<long>(type: "bigint", nullable: false),
-                    user_id = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_contacts_id", x => x.id);
+                    table.PrimaryKey("pk_user_contacts_id", x => x.Id);
                     table.ForeignKey(
                         name: "fk_user_contacts_users",
-                        column: x => x.user_id,
+                        column: x => x.UserId,
                         principalSchema: "carevo",
                         principalTable: "users",
                         principalColumn: "Id",
@@ -207,22 +207,22 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo",
                 columns: table => new
                 {
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    skill_id = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    SkillId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user_skills", x => new { x.user_id, x.skill_id });
+                    table.PrimaryKey("pk_user_skills", x => new { x.UserId, x.SkillId });
                     table.ForeignKey(
                         name: "fk_user_skills_skills",
-                        column: x => x.skill_id,
+                        column: x => x.SkillId,
                         principalSchema: "carevo",
                         principalTable: "skills",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_user_skills_users",
-                        column: x => x.user_id,
+                        column: x => x.UserId,
                         principalSchema: "carevo",
                         principalTable: "users",
                         principalColumn: "Id",
@@ -237,13 +237,13 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     PreviousStatus = table.Column<string>(type: "varchar(50)", nullable: true),
-                    StatusChangedDate = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    StatusChangedDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
                     Notes = table.Column<string>(type: "varchar", nullable: true),
                     ChangedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     Reason = table.Column<string>(type: "varchar(500)", nullable: true),
                     ApplicationId = table.Column<int>(type: "integer", nullable: false),
                     ApplicationId1 = table.Column<int>(type: "integer", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     VersionStamp = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -275,7 +275,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     Description = table.Column<string>(type: "varchar", nullable: false),
                     EmploymentId = table.Column<int>(type: "integer", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
                 },
@@ -381,16 +381,16 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_user_contacts_user_id",
+                name: "IX_user_contacts_UserId",
                 schema: "carevo",
                 table: "user_contacts",
-                column: "user_id");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_user_skills_skill_id",
+                name: "IX_user_skills_SkillId",
                 schema: "carevo",
                 table: "user_skills",
-                column: "skill_id");
+                column: "SkillId");
         }
 
         /// <inheritdoc />

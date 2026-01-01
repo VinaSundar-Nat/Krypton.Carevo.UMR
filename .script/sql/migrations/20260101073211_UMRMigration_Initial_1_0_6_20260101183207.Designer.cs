@@ -13,8 +13,8 @@ using NpgsqlTypes;
 namespace Kr.Carevo.UMR.Persistence.Migrations
 {
     [DbContext(typeof(CarevoDbContext))]
-    [Migration("20251230023502_UMRMigration_Initial_1_0_2_20251230133459")]
-    partial class UMRMigration_Initial_1_0_2_20251230133459
+    [Migration("20260101073211_UMRMigration_Initial_1_0_6_20260101183207")]
+    partial class UMRMigration_Initial_1_0_6_20260101183207
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,11 +54,11 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "applicationseq", "carevo");
 
                     b.Property<DateTime>("AppliedDate")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamptz");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -116,7 +116,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -137,7 +137,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("StatusChangedDate")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamptz");
 
                     b.Property<long>("VersionStamp")
                         .HasColumnType("bigint");
@@ -168,7 +168,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -177,13 +177,13 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnName("CreatedBy");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamptz");
 
                     b.Property<string>("Logo")
                         .HasColumnType("varchar");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamptz");
 
                     b.Property<string>("Url")
                         .HasColumnType("varchar");
@@ -216,7 +216,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -288,7 +288,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -302,7 +302,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnName("description");
 
                     b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("effective_date");
 
                     b.Property<uint>("VersionStamp")
@@ -337,7 +337,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -374,7 +374,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamptz")
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -383,7 +383,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnName("CreatedBy");
 
                     b.Property<DateTime>("Dob")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamptz");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -403,7 +403,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnName("xmin");
 
                     b.HasKey("Id")
-                        .HasName("pk_Users_Id");
+                        .HasName("pk_users_Id");
 
                     b.ToTable("users", "carevo");
                 });
@@ -412,11 +412,11 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
-                        .HasColumnName("user_id");
+                        .HasColumnName("UserId");
 
                     b.Property<int>("SkillId")
                         .HasColumnType("integer")
-                        .HasColumnName("skill_id");
+                        .HasColumnName("SkillId");
 
                     b.HasKey("UserId", "SkillId")
                         .HasName("pk_user_skills");
@@ -575,41 +575,45 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("integer")
-                                .HasColumnName("id");
+                                .HasColumnName("Id");
 
                             NpgsqlPropertyBuilderExtensions.UseHiLo(b1.Property<int>("Id"), "contactseq", "carevo");
 
                             b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("timestamp with time zone");
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("timestamptz")
+                                .HasColumnName("CreatedAt")
+                                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                             b1.Property<string>("CreatedBy")
-                                .HasColumnType("text");
+                                .HasColumnType("varchar(500)")
+                                .HasColumnName("CreatedBy");
 
                             b1.Property<string>("Type")
                                 .IsRequired()
                                 .HasColumnType("varchar(50)")
-                                .HasColumnName("type");
+                                .HasColumnName("Type");
+
+                            b1.Property<int>("UserId")
+                                .HasColumnType("integer");
 
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("varchar(500)")
-                                .HasColumnName("value");
+                                .HasColumnName("Value");
 
                             b1.Property<long>("VersionStamp")
                                 .HasColumnType("bigint");
 
-                            b1.Property<int>("user_id")
-                                .HasColumnType("integer");
-
                             b1.HasKey("Id")
                                 .HasName("pk_user_contacts_id");
 
-                            b1.HasIndex("user_id");
+                            b1.HasIndex("UserId");
 
                             b1.ToTable("user_contacts", "carevo");
 
                             b1.WithOwner()
-                                .HasForeignKey("user_id")
+                                .HasForeignKey("UserId")
                                 .HasConstraintName("fk_user_contacts_users");
                         });
 

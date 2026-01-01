@@ -17,14 +17,14 @@ public sealed class SkillConfiguration : IEntityTypeConfiguration<Skill>
 
         builder.HasKey(a => a.Id).HasName("pk_skills_id");
         builder.Property(a => a.VersionStamp).IsRowVersion();
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("created_at")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("created_at")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("created_by")
             .IsRequired(false);
 
         builder.Property(s => s.Code).HasColumnName("code").HasColumnType("varchar(100)").IsRequired();
         builder.Property(s => s.Description).HasColumnName("description").HasColumnType("varchar").IsRequired();
-        builder.Property(s => s.EffectiveDate).HasColumnName("effective_date").HasColumnType("timestamp").IsRequired();
+        builder.Property(s => s.EffectiveDate).HasColumnName("effective_date").HasColumnType("timestamptz").IsRequired();
 
         // Many-to-many with User via UserSkill join entity
         builder.HasMany(s => s.Users)

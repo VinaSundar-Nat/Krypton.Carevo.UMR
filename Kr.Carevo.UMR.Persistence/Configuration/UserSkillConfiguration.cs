@@ -12,8 +12,8 @@ public sealed class UserSkillConfiguration : IEntityTypeConfiguration<UserSkill>
         
         builder.HasKey(us => new { us.UserId, us.SkillId }).HasName("pk_user_skills");
 
-        builder.Property(us => us.UserId).HasColumnName("user_id").HasColumnType("integer").IsRequired();
-        builder.Property(us => us.SkillId).HasColumnName("skill_id").HasColumnType("integer").IsRequired();
+        builder.Property(us => us.UserId).HasColumnName("UserId").HasColumnType("integer").IsRequired();
+        builder.Property(us => us.SkillId).HasColumnName("SkillId").HasColumnType("integer").IsRequired();
 
         // Foreign keys
         builder.HasOne(us => us.User)

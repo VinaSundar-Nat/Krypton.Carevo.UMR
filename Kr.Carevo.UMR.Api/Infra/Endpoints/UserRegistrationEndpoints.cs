@@ -1,9 +1,8 @@
 ﻿using Kr.Carevo.UMR.Api.Infra.Helpers;
 using Kr.Carevo.UMR.Application.Feature.User.Command.Register;
 using Kr.Carevo.UMR.Domain.Dto;
-using Kr.Carevo.UMR.Domain.Ports;
 using Kr.Common.Infrastructure.Http.Models;
-using Kr.Common.Infrastructure.Resolver;
+using Kr.Common.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 

@@ -18,16 +18,16 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
          "userseq", "carevo")
          .ValueGeneratedOnAdd();
 
-        builder.HasKey(a => a.Id).HasName("pk_Users_Id");
+        builder.HasKey(a => a.Id).HasName("pk_users_Id");
         builder.Property(a => a.VersionStamp).IsRowVersion();
-        builder.Property(a => a.CreatedAt).HasColumnType("timestamp").HasColumnName("CreatedAt")
+        builder.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
             .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
             .IsRequired(false);
 
         builder.Property(u => u.FirstName).HasColumnType("varchar(200)").IsRequired();
         builder.Property(u => u.LastName).HasColumnType("varchar(200)").IsRequired();
-        builder.Property(u => u.Dob).HasColumnType("timestamp").IsRequired();
+        builder.Property(u => u.Dob).HasColumnType("timestamptz").IsRequired();
         builder.Property(u => u.Status).HasColumnType("smallint").HasConversion<int>().IsRequired();
 
         // Owned entity: ResidentialAddress
@@ -51,17 +51,21 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         {
             e.ToTable("user_contacts", "carevo");
             e.WithOwner()
-                .HasForeignKey("user_id")
+                .HasForeignKey("UserId")
                 .HasConstraintName("fk_user_contacts_users");
 
             NpgsqlExt.UseHiLo(
-                e.Property(c => c.Id).HasColumnName("id").HasColumnType("integer"),
+                e.Property(c => c.Id).HasColumnName("Id").HasColumnType("integer"),
                 "contactseq", "carevo")
                 .ValueGeneratedOnAdd();
 
             e.HasKey("Id").HasName("pk_user_contacts_id");
-            e.Property(c => c.Type).HasColumnName("type").HasColumnType("varchar(50)").IsRequired();
-            e.Property(c => c.Value).HasColumnName("value").HasColumnType("varchar(500)").IsRequired();
+            e.Property(c => c.Type).HasColumnName("Type").HasColumnType("varchar(50)").IsRequired();
+            e.Property(c => c.Value).HasColumnName("Value").HasColumnType("varchar(500)").IsRequired();
+            e.Property(a => a.CreatedAt).HasColumnType("timestamptz").HasColumnName("CreatedAt")
+            .ValueGeneratedOnAdd().HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            e.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
+                .IsRequired(false);
         });
 
         // One-to-many: Employment
