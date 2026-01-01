@@ -11,6 +11,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" />
     <PackageReference Include="Krypton.Common" />
+    <PackageReference Include="AutoMapper" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Kr.Carevo.UMR.Domain/Kr.Carevo.UMR.Domain.csproj" />

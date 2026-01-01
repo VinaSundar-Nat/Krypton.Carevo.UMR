@@ -1,5 +1,7 @@
 ﻿using Kr.Carevo.UMR.Api.Infra.Helpers;
 using Kr.Carevo.UMR.Application.Feature.User.Command.Register;
+using Kr.Carevo.UMR.Application.Feature.User.Command.Skills;
+using Kr.Carevo.UMR.Application.Feature.User.Query.Details;
 using Kr.Carevo.UMR.Domain.Dto;
 using Kr.Common.Infrastructure.Http.Models;
 using Kr.Common.Mediator;
@@ -31,5 +33,44 @@ public static partial class ApiEndpoints
                 "User Registration",
                 "Enterprise Carevo user operations."
         ));
+
+        sampleGroup.MapPost("/{userId:int}/skills",
+        [ProducesResponseType<ApiSuccessResponse<IEnumerable<SkillDto>>>(StatusCodes.Status200OK, "application/json")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+         async ([FromRoute] int userId, [FromBody] IEnumerable<SkillDto> skills,
+                HttpContext context,
+                [FromServices] IMediate mediate,
+                CancellationToken token = default) =>
+        {
+            var updatedSkills = await mediate.Send(new UserSkillsCommand { UserId = userId, Skills = skills }, token);
+            return TypedResults.Ok(updatedSkills);
+        }).WithOpenApi(operation =>
+            operation.GenerateOpenApiDoc(
+                "v1 user skills update.",
+                "user skills update endpoint to test the api.",
+                "User Skills Update",
+                "Enterprise Carevo user operations."
+        ));
+
+        sampleGroup.MapGet("/{id:int}",
+        [ProducesResponseType<ApiSuccessResponse<IEnumerable<SkillDto>>>(StatusCodes.Status200OK, "application/json")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
+        [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+         async ([FromRoute] int id,
+                HttpContext context,
+                [FromServices] IMediate mediate,
+                CancellationToken token = default) =>
+        {
+            var userDetails = await mediate.Send(new UserDetailsQuery(LookupMode.ById, Id: id), token);
+            return TypedResults.Ok(userDetails);
+        }).WithOpenApi(operation =>
+            operation.GenerateOpenApiDoc(
+                "v1 user details.",
+                "user details endpoint to test the api.",
+                "User Details",
+                "Enterprise Carevo user operations."
+        ));
+
     }
 }

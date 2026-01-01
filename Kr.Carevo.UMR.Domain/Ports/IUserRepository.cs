@@ -4,6 +4,9 @@ namespace Kr.Carevo.UMR.Domain.Ports;
 
 public interface IUserRepository
 {
-    Task<UserDto> Create(UserDto user, CancellationToken cancellationToken = default);
+    Task<UserDto> CreateAsync(UserDto user, CancellationToken cancellationToken = default);
     Task<bool> ExistsByContactAsync(string contactValue, CancellationToken cancellationToken = default);
+    Task<IEnumerable<SkillDto>> UpdateSkillsAsync(int userId, IEnumerable<SkillDto> skills, CancellationToken cancellationToken = default);
+    Task<IEnumerable<UserResponseDto>> GetDetailsByIdAsync(int value, CancellationToken cancellationToken = default);
+    Task<IEnumerable<UserResponseDto>> GetDetailsByEmailAsync(string email, CancellationToken cancellationToken = default);
 }

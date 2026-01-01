@@ -28,7 +28,7 @@ public sealed class ApplicationStatusHistoryConfiguration : IEntityTypeConfigura
 
         // Foreign key to Application
         builder.HasOne(h => h.Application)
-            .WithMany()
+            .WithMany(a => a.StatusHistory)
             .HasForeignKey(h => h.ApplicationId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("fk_application_status_history_applications");

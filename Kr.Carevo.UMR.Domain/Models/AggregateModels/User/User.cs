@@ -89,31 +89,19 @@ public sealed class User : BaseEntity<User>, IAggregateRoot
         }
     }
 
-    public void AddSkill(string code, string description, DateTime effectiveDate)
+    public void AddSkill(SkillDto skill)
     {
-        ArgumentNullException.ThrowIfNull(code, nameof(code));
-        ArgumentNullException.ThrowIfNull(description, nameof(description));
 
-        if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException("Code cannot be empty.", nameof(code));
-
-        if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentException("Description cannot be empty.", nameof(description));
-
-        if (effectiveDate == default)
-            throw new ArgumentException("EffectiveDate must be a valid date.", nameof(effectiveDate));
-
-        if (this.Skills.Any(s => s.Code.Equals(code, StringComparison.OrdinalIgnoreCase)))
-            throw new InvalidOperationException($"A skill with code '{code}' already exists for this user.");
-
-        var skill = new Skill
+        this.UserSkills.Add(new UserSkill
         {
-            Code = code,
-            Description = description,
-            EffectiveDate = effectiveDate
-        };
-
-        this.Skills.Add(skill);
+            Skill = new Skill
+            {
+                Code = skill.Code,
+                Description = skill.Description,
+                EffectiveDate = skill.EffectiveDate ?? DateTime.UtcNow
+            },
+            UserId = this.Id,
+        });
     }
 
     public void RemoveSkill(int skillId)
