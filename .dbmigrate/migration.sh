@@ -43,7 +43,7 @@ if [ "$script" = true ] ; then
     if [ "$sqlscript" = true ] ; then
         echo "Generating SQL script for migration: $name"
 
-         dotnet ef migrations script --idempotent --output "../.script/sql/$name.sql" \
+         dotnet ef migrations script --idempotent --output "../.dbmigrate/sql/$name.sql" \
         --project ../Kr.Carevo.UMR.Persistence \
         --startup-project ../Kr.Carevo.UMR.Api \
         --verbose
