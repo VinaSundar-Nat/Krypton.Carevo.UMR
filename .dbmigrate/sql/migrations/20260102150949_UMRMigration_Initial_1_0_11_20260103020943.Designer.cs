@@ -13,8 +13,8 @@ using NpgsqlTypes;
 namespace Kr.Carevo.UMR.Persistence.Migrations
 {
     [DbContext(typeof(CarevoDbContext))]
-    [Migration("20260101073211_UMRMigration_Initial_1_0_6_20260101183207")]
-    partial class UMRMigration_Initial_1_0_6_20260101183207
+    [Migration("20260102150949_UMRMigration_Initial_1_0_11_20260103020943")]
+    partial class UMRMigration_Initial_1_0_11_20260103020943
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,13 +34,15 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
             modelBuilder.HasSequence<int>("contactseq", "carevo");
 
-            modelBuilder.HasSequence<int>("employmentseq", "carevo");
+            modelBuilder.HasSequence<int>("employerseq", "carevo");
 
             modelBuilder.HasSequence<int>("projectseq", "carevo");
 
             modelBuilder.HasSequence<int>("skillseq", "carevo");
 
             modelBuilder.HasSequence<int>("streakseq", "carevo");
+
+            modelBuilder.HasSequence<int>("userempseq", "carevo");
 
             modelBuilder.HasSequence<int>("userseq", "carevo");
 
@@ -108,9 +110,6 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ApplicationId1")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ChangedBy")
                         .HasColumnType("varchar(500)");
 
@@ -145,22 +144,20 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_application_status_history_Id");
 
-                    b.HasIndex("ApplicationId1");
-
                     b.HasIndex("ApplicationId", "StatusChangedDate")
                         .HasDatabaseName("idx_app_history_appid_date");
 
                     b.ToTable("application_status_history", "carevo");
                 });
 
-            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employment", b =>
+            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("Id");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "employmentseq", "carevo");
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "employerseq", "carevo");
 
                     b.Property<string>("Company")
                         .IsRequired()
@@ -176,20 +173,11 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnType("varchar(500)")
                         .HasColumnName("CreatedBy");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamptz");
-
                     b.Property<string>("Logo")
                         .HasColumnType("varchar");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamptz");
-
                     b.Property<string>("Url")
                         .HasColumnType("varchar");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
 
                     b.Property<uint>("VersionStamp")
                         .IsConcurrencyToken()
@@ -200,9 +188,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_employments_Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("employments", "carevo");
+                    b.ToTable("employers", "carevo");
                 });
 
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Project", b =>
@@ -228,12 +214,12 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("varchar");
 
-                    b.Property<int?>("EmploymentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("varchar(500)");
+
+                    b.Property<int?>("UserEmployerId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -247,7 +233,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_projects_Id");
 
-                    b.HasIndex("EmploymentId");
+                    b.HasIndex("UserEmployerId");
 
                     b.HasIndex("UserId");
 
@@ -408,6 +394,41 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.ToTable("users", "carevo");
                 });
 
+            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.UserEmployer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("Id");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "userempseq", "carevo");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("EmployerId");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamptz");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamptz");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id")
+                        .HasName("pk_useremployers_Id");
+
+                    b.HasIndex("EmployerId");
+
+                    b.HasIndex("UserId", "EmployerId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_user_employers_userid_employerid");
+
+                    b.ToTable("user_employers", "carevo");
+                });
+
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.UserSkill", b =>
                 {
                     b.Property<int>("UserId")
@@ -441,38 +462,22 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.ApplicationStatusHistory", b =>
                 {
                     b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.Application", "Application")
-                        .WithMany()
+                        .WithMany("StatusHistory")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_application_status_history_applications");
 
-                    b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.Application", null)
-                        .WithMany("StatusHistory")
-                        .HasForeignKey("ApplicationId1");
-
                     b.Navigation("Application");
-                });
-
-            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employment", b =>
-                {
-                    b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.User", "User")
-                        .WithMany("Employments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_employments_users");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Project", b =>
                 {
-                    b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employment", "Employment")
+                    b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.UserEmployer", "UserEmployer")
                         .WithMany("Projects")
-                        .HasForeignKey("EmploymentId")
+                        .HasForeignKey("UserEmployerId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_projects_employments");
+                        .HasConstraintName("fk_projects_useremployers");
 
                     b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.User", "User")
                         .WithMany("IndividualProjects")
@@ -480,9 +485,9 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_projects_users_individual");
 
-                    b.Navigation("Employment");
-
                     b.Navigation("User");
+
+                    b.Navigation("UserEmployer");
                 });
 
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.ProjectSkill", b =>
@@ -622,6 +627,27 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.Navigation("ResidentialAddress");
                 });
 
+            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.UserEmployer", b =>
+                {
+                    b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employer", "Employer")
+                        .WithMany("UserEmployers")
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_employers_employers");
+
+                    b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.User", "User")
+                        .WithMany("UserEmployers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_employers_users");
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.UserSkill", b =>
                 {
                     b.HasOne("Kr.Carevo.UMR.Domain.Models.AggregateModels.Skill", "Skill")
@@ -648,9 +674,9 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     b.Navigation("StatusHistory");
                 });
 
-            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employment", b =>
+            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Employer", b =>
                 {
-                    b.Navigation("Projects");
+                    b.Navigation("UserEmployers");
                 });
 
             modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.Project", b =>
@@ -671,11 +697,16 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
                     b.Navigation("Applications");
 
-                    b.Navigation("Employments");
-
                     b.Navigation("IndividualProjects");
 
+                    b.Navigation("UserEmployers");
+
                     b.Navigation("UserSkills");
+                });
+
+            modelBuilder.Entity("Kr.Carevo.UMR.Domain.Models.AggregateModels.UserEmployer", b =>
+                {
+                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

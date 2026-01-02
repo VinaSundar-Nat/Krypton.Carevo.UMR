@@ -24,7 +24,7 @@ public sealed class User : BaseEntity<User>, IAggregateRoot
     // Many-to-many relationships
     public ICollection<UserSkill> UserSkills { get; private set; } = [];
 
-    public ICollection<Employment> Employments { get; private set; } = [];
+    public ICollection<UserEmployer> UserEmployers { get; private set; } = [];
     public ICollection<Project> IndividualProjects { get; private set; } = [];
     public ICollection<Application> Applications { get; private set; } = [];
     public ICollection<Streak> ActivityStreaks { get; private set; } = [];
@@ -114,15 +114,7 @@ public sealed class User : BaseEntity<User>, IAggregateRoot
         this.Skills.Remove(skill);
     }
    
-    public void RemoveEmployment(int employmentId)
-    {
-        var employment = this.Employments.FirstOrDefault(e => e.Id == employmentId);
 
-        if (employment == null)
-            throw new InvalidOperationException($"Employment with ID '{employmentId}' not found for this user.");
-
-        this.Employments.Remove(employment);
-    }
 
     public void AddIndividualProject(string title, string description, IEnumerable<Skill>? skills = null)
     {

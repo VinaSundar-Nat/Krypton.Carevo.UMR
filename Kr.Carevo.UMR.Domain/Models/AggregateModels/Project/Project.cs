@@ -5,10 +5,10 @@ namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
 public sealed class Project : BaseEntity<Project>, IAggregateRoot
 {
-    public required string Title { get; set; }
+    public required string Title { get;  set; }
     public required string Description { get; set; }
-    public int? EmploymentId { get; set; }
-    public Employment? Employment { get; set; }
+    public int? UserEmployerId { get; set; }
+    public UserEmployer? UserEmployer { get; set; }
     public int? UserId { get; set; }
     public User? User { get; set; }   
     public ICollection<ProjectSkill> RequiredSkills { get; private set; } = [];
@@ -25,6 +25,8 @@ public sealed class Project : BaseEntity<Project>, IAggregateRoot
         Title = title;
         Description = description;
     }
+
+   
 
     public void AddSkill(Skill skill)
     {

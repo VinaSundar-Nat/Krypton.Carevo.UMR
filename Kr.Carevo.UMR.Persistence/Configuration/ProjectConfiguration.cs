@@ -25,13 +25,6 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(p => p.Title).HasColumnType("varchar(500)").IsRequired();
         builder.Property(p => p.Description).HasColumnType("varchar").IsRequired();
 
-        // Foreign key to Employment (optional)
-        builder.HasOne(p => p.Employment)
-            .WithMany(e => e.Projects)
-            .HasForeignKey(p => p.EmploymentId)
-            .OnDelete(DeleteBehavior.SetNull)
-            .HasConstraintName("fk_projects_employments");
-
         // Foreign key to User (for individual projects)
         builder.HasOne(p => p.User)
             .WithMany(u => u.IndividualProjects)

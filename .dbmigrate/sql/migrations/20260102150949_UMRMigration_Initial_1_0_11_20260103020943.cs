@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace Kr.Carevo.UMR.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UMRMigration_Initial_1_0_6_20260101183207 : Migration
+    public partial class UMRMigration_Initial_1_0_11_20260103020943 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +31,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo");
 
             migrationBuilder.CreateSequence<int>(
-                name: "employmentseq",
+                name: "employerseq",
                 schema: "carevo");
 
             migrationBuilder.CreateSequence<int>(
@@ -47,8 +47,30 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo");
 
             migrationBuilder.CreateSequence<int>(
+                name: "userempseq",
+                schema: "carevo");
+
+            migrationBuilder.CreateSequence<int>(
                 name: "userseq",
                 schema: "carevo");
+
+            migrationBuilder.CreateTable(
+                name: "employers",
+                schema: "carevo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Company = table.Column<string>(type: "varchar(500)", nullable: false),
+                    Logo = table.Column<string>(type: "varchar", nullable: true),
+                    Url = table.Column<string>(type: "varchar", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
+                    xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_employments_Id", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "skills",
@@ -150,34 +172,6 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "employments",
-                schema: "carevo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Company = table.Column<string>(type: "varchar(500)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamptz", nullable: true),
-                    Logo = table.Column<string>(type: "varchar", nullable: true),
-                    Url = table.Column<string>(type: "varchar", nullable: true),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
-                    xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_employments_Id", x => x.Id);
-                    table.ForeignKey(
-                        name: "fk_employments_users",
-                        column: x => x.UserId,
-                        principalSchema: "carevo",
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "user_contacts",
                 schema: "carevo",
                 columns: table => new
@@ -195,6 +189,36 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     table.PrimaryKey("pk_user_contacts_id", x => x.Id);
                     table.ForeignKey(
                         name: "fk_user_contacts_users",
+                        column: x => x.UserId,
+                        principalSchema: "carevo",
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_employers",
+                schema: "carevo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    EmployerId = table.Column<int>(type: "integer", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamptz", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_useremployers_Id", x => x.Id);
+                    table.ForeignKey(
+                        name: "fk_user_employers_employers",
+                        column: x => x.EmployerId,
+                        principalSchema: "carevo",
+                        principalTable: "employers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_user_employers_users",
                         column: x => x.UserId,
                         principalSchema: "carevo",
                         principalTable: "users",
@@ -242,7 +266,6 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     ChangedBy = table.Column<string>(type: "varchar(500)", nullable: true),
                     Reason = table.Column<string>(type: "varchar(500)", nullable: true),
                     ApplicationId = table.Column<int>(type: "integer", nullable: false),
-                    ApplicationId1 = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     VersionStamp = table.Column<long>(type: "bigint", nullable: false)
@@ -250,12 +273,6 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_application_status_history_Id", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_application_status_history_applications_ApplicationId1",
-                        column: x => x.ApplicationId1,
-                        principalSchema: "carevo",
-                        principalTable: "applications",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "fk_application_status_history_applications",
                         column: x => x.ApplicationId,
@@ -273,7 +290,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "varchar(500)", nullable: false),
                     Description = table.Column<string>(type: "varchar", nullable: false),
-                    EmploymentId = table.Column<int>(type: "integer", nullable: true),
+                    UserEmployerId = table.Column<int>(type: "integer", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamptz", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     CreatedBy = table.Column<string>(type: "varchar(500)", nullable: true),
@@ -283,10 +300,10 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 {
                     table.PrimaryKey("pk_projects_Id", x => x.Id);
                     table.ForeignKey(
-                        name: "fk_projects_employments",
-                        column: x => x.EmploymentId,
+                        name: "fk_projects_useremployers",
+                        column: x => x.UserEmployerId,
                         principalSchema: "carevo",
-                        principalTable: "employments",
+                        principalTable: "user_employers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
@@ -345,21 +362,9 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 columns: new[] { "ApplicationId", "StatusChangedDate" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_application_status_history_ApplicationId1",
-                schema: "carevo",
-                table: "application_status_history",
-                column: "ApplicationId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_applications_UserId",
                 schema: "carevo",
                 table: "applications",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_employments_UserId",
-                schema: "carevo",
-                table: "employments",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -369,10 +374,10 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 column: "skill_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_projects_EmploymentId",
+                name: "IX_projects_UserEmployerId",
                 schema: "carevo",
                 table: "projects",
-                column: "EmploymentId");
+                column: "UserEmployerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_projects_UserId",
@@ -385,6 +390,19 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo",
                 table: "user_contacts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_employers_EmployerId",
+                schema: "carevo",
+                table: "user_employers",
+                column: "EmployerId");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_employers_userid_employerid",
+                schema: "carevo",
+                table: "user_employers",
+                columns: new[] { "UserId", "EmployerId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_skills_SkillId",
@@ -429,7 +447,11 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo");
 
             migrationBuilder.DropTable(
-                name: "employments",
+                name: "user_employers",
+                schema: "carevo");
+
+            migrationBuilder.DropTable(
+                name: "employers",
                 schema: "carevo");
 
             migrationBuilder.DropTable(
@@ -449,7 +471,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 schema: "carevo");
 
             migrationBuilder.DropSequence(
-                name: "employmentseq",
+                name: "employerseq",
                 schema: "carevo");
 
             migrationBuilder.DropSequence(
@@ -462,6 +484,10 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
 
             migrationBuilder.DropSequence(
                 name: "streakseq",
+                schema: "carevo");
+
+            migrationBuilder.DropSequence(
+                name: "userempseq",
                 schema: "carevo");
 
             migrationBuilder.DropSequence(
