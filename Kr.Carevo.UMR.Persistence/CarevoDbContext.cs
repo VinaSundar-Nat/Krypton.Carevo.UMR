@@ -14,12 +14,13 @@ public class CarevoDbContext(DbContextOptions<CarevoDbContext> options,
     public DbSet<User> Users { get; set; }
     public DbSet<Skill> Skills { get; set; }
     public DbSet<Project> Projects { get; set; }
-    public DbSet<Employment> Employments { get; set; }
+    public DbSet<Employer> Employers { get; set; }
     public DbSet<Application> Applications { get; set; }
     public DbSet<ApplicationStatusHistory> ApplicationStatusHistories { get; set; }
     public DbSet<Streak> ActivityStreaks { get; set; }
     public DbSet<UserSkill> UserSkills { get; set; }
     public DbSet<ProjectSkill> ProjectSkills { get; set; }
+    public DbSet<UserEmployer> UserEmployers { get; set; }
 
     public override Task NotifyChanges()
     {
@@ -54,8 +55,13 @@ public class CarevoDbContext(DbContextOptions<CarevoDbContext> options,
             .StartsAt(1)
             .IncrementsBy(1);
 
-        // Employment sequence
-        modelBuilder.HasSequence<int>("employmentseq", "carevo")
+        // Employer sequence
+        modelBuilder.HasSequence<int>("employerseq", "carevo")
+            .StartsAt(1)
+            .IncrementsBy(1);
+
+        // user Employer sequence
+        modelBuilder.HasSequence<int>("userempseq", "carevo")
             .StartsAt(1)
             .IncrementsBy(1);
 

@@ -42,7 +42,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             e.Property(a => a.Country).IsRequired().HasColumnName("Address_Country").HasColumnType("varchar(100)").IsRequired();
             e.Property(a => a.Coordinates)
                 .HasColumnName("Address_Coordinates").HasColumnType("point").HasConversion(
-                    v => new NpgsqlPoint(v.Longitude, v.Latitude), 
+                    v => v == null ? new NpgsqlPoint(0, 0) : new NpgsqlPoint(v.Longitude, v.Latitude), 
                     v => new Coordinates(v.Y, v.X));
         });
 
@@ -67,13 +67,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             e.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
                 .IsRequired(false);
         });
-
-        // One-to-many: Employment
-        builder.HasMany(a => a.Employments)
-            .WithOne(e => e.User)
-            .HasForeignKey(e => e.UserId)
-            .OnDelete(DeleteBehavior.Cascade)
-            .HasConstraintName("fk_employments_users");
 
         // One-to-many: Individual Projects
         builder.HasMany(a => a.IndividualProjects)
