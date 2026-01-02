@@ -1,0 +1,279 @@
+openapi: 3.0.1
+info:
+  title: 'Kr.Carevo.UMR.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+  version: '1.0'
+paths:
+  /verify:
+    get:
+      tags:
+        - Healthcheck
+      summary: v1 health check.
+      description: verify the health of the application.
+      requestBody:
+        content: { }
+      responses:
+        '200':
+          description: OK
+  /api/user/v1/register:
+    post:
+      tags:
+        - User Registration
+      summary: v1 user registration.
+      description: user registration endpoint to test the api.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Void'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
+  '/api/user/v1/{userId}/skills':
+    post:
+      tags:
+        - User Skills Update
+      summary: v1 user skills update.
+      description: user skills update endpoint to test the api.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SkillDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SkillDto'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
+  '/api/user/v1/{id}':
+    get:
+      tags:
+        - User Details
+      summary: v1 user details.
+      description: user details endpoint to test the api.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content: { }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponseDto'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
+components:
+  schemas:
+    AddressDto:
+      type: object
+      properties:
+        line1:
+          type: string
+          nullable: true
+        line2:
+          type: string
+          nullable: true
+        suburb:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        postCode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        latitude:
+          type: number
+          format: double
+          nullable: true
+        longitude:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    ContactDto:
+      type: object
+      properties:
+        email:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+        mobileNumber:
+          type: string
+          nullable: true
+        isValid:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: { }
+    SkillDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        effectiveDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          format: date-time
+        address:
+          $ref: '#/components/schemas/AddressDto'
+        contact:
+          $ref: '#/components/schemas/ContactDto'
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UserResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          format: date-time
+        name:
+          type: string
+          nullable: true
+          readOnly: true
+        contact:
+          $ref: '#/components/schemas/ContactDto'
+        status:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    Void:
+      type: object
+      additionalProperties: false

@@ -17,4 +17,8 @@
     <ProjectReference Include="../Kr.Carevo.UMR.Domain/Kr.Carevo.UMR.Domain.csproj" />
   </ItemGroup>
 
+  <Target Name="GenerateOpenApi" AfterTargets="Build" Condition="'$(GenerateOpenApi)' != 'false'">
+    <Exec Command="bash $(MSBuildProjectDirectory)/../.scripts/generate-openapi.sh" />
+  </Target>
+
 </Project>
