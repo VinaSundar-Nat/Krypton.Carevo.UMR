@@ -74,7 +74,7 @@ jobs:
           dotnet restore Tests/Kr.Carevo.UMR.UnitTests/*.csproj
 
       - name: Build project
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore /p:GenerateOpenApi=false 
 
       - name: Run unit tests
         run: dotnet test Tests/Kr.Carevo.UMR.UnitTests/*.csproj --configuration Release --no-build --verbosity normal
