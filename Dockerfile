@@ -16,7 +16,7 @@ RUN dotnet restore Kr.Carevo.UMR.sln
 COPY . .
 
 WORKDIR /src/Kr.Carevo.UMR.Api
-RUN dotnet publish -c Release --no-restore -o /core
+RUN dotnet publish -c Release --no-restore -o /core /p:GenerateOpenApi=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /core
