@@ -5,14 +5,48 @@ namespace Kr.Carevo.UMR.Domain.Models.AggregateModels;
 
 public sealed class Project : BaseEntity<Project>, IAggregateRoot
 {
-    public required string Title { get;  set; }
-    public required string Description { get; set; }
-    public int? UserEmployerId { get; set; }
+    public string Title { get;  private set; } = string.Empty!;
+    public string Description { get; private set; } = string.Empty!;
+    public int? UserEmployerId { get; private set; }
     public UserEmployer? UserEmployer { get; set; }
     public int? UserId { get; set; }
     public User? User { get; set; }   
     public ICollection<ProjectSkill> RequiredSkills { get; private set; } = [];
     public ICollection<Skill> Skills { get; set; } =[];
+
+    public void CreateProject(string title, string description, int? userEmployerId = null, int? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentException("Title cannot be empty.", nameof(title));
+
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentException("Description cannot be empty.", nameof(description));
+
+        Title = title;
+        Description = description;
+
+        if (userEmployerId.HasValue)
+            UserEmployerId = userEmployerId.Value;
+
+        if (userId.HasValue)
+            UserId = userId.Value;
+    }
+
+
+    public void AddSkill(SkillDto skill, int? projectId = null)
+    {
+
+        this.RequiredSkills.Add(new ProjectSkill
+        {
+            Skill = new Skill
+            {
+                Code = skill.Code,
+                Description = skill.Description,
+                EffectiveDate = skill.EffectiveDate ?? DateTime.UtcNow
+            },
+            ProjectId =  projectId ?? this.Id,
+        });
+    }
    
     public void UpdateProject(string title, string description)
     {

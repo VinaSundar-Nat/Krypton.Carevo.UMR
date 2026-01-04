@@ -1,16 +1,8 @@
-using System;
-using Kr.Carevo.UMR.Domain.Dto;
-using Kr.Carevo.UMR.Domain.Ports;
 using Kr.Common.Infrastructure.Datastore;
 using Kr.Carevo.UMR.Domain.Models.AggregateModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Kr.Common.Exceptions;
-using FluentValidation.Results;
-using Microsoft.Identity.Client.Extensibility;
-using Microsoft.EntityFrameworkCore.Metadata;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 namespace Kr.Carevo.UMR.Persistence.Aggregate;
 
@@ -33,6 +25,13 @@ public class UserRepository(ILogger<UserRepository> logger, CarevoDbContext dbCo
             .AsNoTracking()
             .SelectMany(u => u.Contacts)
             .AnyAsync(c => c.Value == contactValue, cancellationToken);
+    }
+
+    public async Task<bool> ExistsByIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await DBset
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == userId, cancellationToken);
     }
 
     public async Task<IEnumerable<UserResponseDto>> GetDetailsByIdAsync(int value, CancellationToken cancellationToken = default)

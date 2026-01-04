@@ -1,7 +1,7 @@
 ﻿using Kr.Carevo.UMR.Api.Infra.Helpers;
 using Kr.Carevo.UMR.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.OpenApi.Models;
+
 
 
 namespace Kr.Carevo.UMR.Api.Infra.Endpoints;

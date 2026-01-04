@@ -1,21 +1,16 @@
-﻿using Kr.Carevo.UMR.Api.Infra.Helpers;
-using Kr.Carevo.UMR.Application.Feature.User.Command.Register;
+﻿using Kr.Carevo.UMR.Application.Feature.User.Command.Register;
 using Kr.Carevo.UMR.Application.Feature.User.Command.Skills;
 using Kr.Carevo.UMR.Application.Feature.User.Query.Details;
-using Kr.Carevo.UMR.Domain.Dto;
-using Kr.Common.Infrastructure.Http.Models;
-using Kr.Common.Mediator;
-using Microsoft.AspNetCore.Mvc;
-
 
 namespace Kr.Carevo.UMR.Api.Infra.Endpoints;
 
 public static partial class ApiEndpoints
 {
-    public static void UserRegistrationEndpoints(this IEndpointRouteBuilder app)
+    private static void UserRegistrationEndpoints(IEndpointRouteBuilder app ,IVersionedEndpointRouteBuilder umrApp)
     {
-        var sampleGroup = app.MapGroup("/api/user/v1");
-        sampleGroup.MapPost("/register",
+        var userApi = app.NewVersionedApi();
+        var userGroup = umrApp.MapGroup("/api/user/v1").HasApiVersion( 1.0 );
+        userGroup.MapPost("/register",
         [ProducesResponseType<ApiSuccessResponse<int?>>(StatusCodes.Status201Created, "application/json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
@@ -29,12 +24,12 @@ public static partial class ApiEndpoints
         }).WithOpenApi(operation =>
             operation.GenerateOpenApiDoc(
                 "v1 user registration.",
-                "user registration endpoint to test the api.",  
+                "user registration endpoint for UMR.",  
                 "User Registration",
                 "Enterprise Carevo user operations."
         ));
 
-        sampleGroup.MapPost("/{userId:int}/skills",
+        userGroup.MapPost("/{userId:int}/skills",
         [ProducesResponseType<ApiSuccessResponse<IEnumerable<SkillDto>>>(StatusCodes.Status200OK, "application/json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
@@ -48,12 +43,12 @@ public static partial class ApiEndpoints
         }).WithOpenApi(operation =>
             operation.GenerateOpenApiDoc(
                 "v1 user skills update.",
-                "user skills update endpoint to test the api.",
+                "user skills update endpoint for UMR.",
                 "User Skills Update",
                 "Enterprise Carevo user operations."
         ));
 
-        sampleGroup.MapGet("/{id:int}",
+        userGroup.MapGet("/{id:int}",
         [ProducesResponseType<ApiSuccessResponse<IEnumerable<SkillDto>>>(StatusCodes.Status200OK, "application/json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, "application/problem+json")]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
@@ -67,7 +62,7 @@ public static partial class ApiEndpoints
         }).WithOpenApi(operation =>
             operation.GenerateOpenApiDoc(
                 "v1 user details.",
-                "user details endpoint to test the api.",
+                "user details endpoint for UMR.",
                 "User Details",
                 "Enterprise Carevo user operations."
         ));

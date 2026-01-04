@@ -1,6 +1,4 @@
-using Kr.Carevo.UMR.Domain.Models.AggregateModels;
 using Kr.Carevo.UMR.Persistence.Configuration;
-using Kr.Common.Infrastructure.Datastore;
 using Kr.Common.Infrastructure.Datastore.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

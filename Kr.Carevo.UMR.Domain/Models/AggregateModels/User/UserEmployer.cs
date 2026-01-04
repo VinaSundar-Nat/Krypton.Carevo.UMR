@@ -34,6 +34,35 @@ public sealed class UserEmployer
 
      public bool IsCurrentEmployment => EndDate == null;
 
+     public void CreateUserEmployment(EmploymentDto dto, int? userId, int? employerId)
+    {
+        ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+        if (dto.StartDate == default)
+            throw new ArgumentException("StartDate must be a valid date.", nameof(dto.StartDate));
+
+        if (dto.EndDate.HasValue && dto.EndDate.Value < dto.StartDate)
+            throw new ArgumentException("EndDate cannot be before StartDate.", nameof(dto.EndDate));
+
+        if(!(userId.HasValue && userId.Value > 0))
+            throw new ArgumentException("Invalid userId.", nameof(userId));
+
+        if(employerId.HasValue)
+            EmployerId = employerId.Value;
+
+        UserId = userId.Value;
+        StartDate = dto.StartDate;
+        EndDate = dto.EndDate;
+
+        if (dto.Projects?.Any() ?? false)
+        {
+            foreach (var projectDto in dto.Projects.Where(p => p != null))
+            {
+                AddProject(projectDto.Title, projectDto.Description, projectDto.Skills);
+            }
+        }
+    }
+
     public void EndEmployment(DateTime endDate)
     {
         if (endDate < StartDate)
@@ -45,7 +74,7 @@ public sealed class UserEmployer
         EndDate = endDate;
     }
 
-     public void AddProject(string title, string description, IEnumerable<Skill>? skills = null)
+     public void AddProject(string title, string description, IEnumerable<SkillDto>? skills = null)
     {
         ArgumentNullException.ThrowIfNull(title, nameof(title));
         ArgumentNullException.ThrowIfNull(description, nameof(description));
@@ -56,12 +85,8 @@ public sealed class UserEmployer
         if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Description cannot be empty.", nameof(description));
 
-        var project = new Project
-        {
-            Title = title,
-            Description = description,
-            UserEmployerId = this.Id,
-        };
+          var project = new Project();
+          project.CreateProject(title, description, userEmployerId: this.Id);
 
         if (skills != null && skills.Any())
         {
@@ -74,7 +99,7 @@ public sealed class UserEmployer
         this.Projects.Add(project);
     }
 
-       public void RemoveProject(int projectId)
+    public void RemoveProject(int projectId)
     {
         var project = this.Projects.FirstOrDefault(p => p.Id == projectId);
 

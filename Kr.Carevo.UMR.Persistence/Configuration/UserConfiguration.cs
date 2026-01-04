@@ -1,10 +1,7 @@
-using Kr.Carevo.UMR.Domain.Models.AggregateModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NpgsqlTypes;
 using NpgsqlExt = Microsoft.EntityFrameworkCore.NpgsqlPropertyBuilderExtensions;
-//using SqlServerExt = Microsoft.EntityFrameworkCore.SqlServerPropertyBuilderExtensions;
-
 
 namespace Kr.Carevo.UMR.Persistence.Configuration;
 

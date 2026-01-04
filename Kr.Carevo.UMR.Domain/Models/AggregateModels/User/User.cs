@@ -127,13 +127,8 @@ public sealed class User : BaseEntity<User>, IAggregateRoot
         if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Description cannot be empty.", nameof(description));
 
-        var project = new Project
-        {
-            Title = title,
-            Description = description,
-            UserId = this.Id,
-            User = this
-        };
+        var project = new Project();
+        project.CreateProject(title, description, userId: this.Id);
 
         if (skills != null && skills.Any())
         {

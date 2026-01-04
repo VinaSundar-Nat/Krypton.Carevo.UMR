@@ -19,7 +19,7 @@ paths:
       tags:
         - User Registration
       summary: v1 user registration.
-      description: user registration endpoint to test the api.
+      description: user registration endpoint for UMR.
       requestBody:
         content:
           application/json:
@@ -52,7 +52,7 @@ paths:
       tags:
         - User Skills Update
       summary: v1 user skills update.
-      description: user skills update endpoint to test the api.
+      description: user skills update endpoint for UMR.
       parameters:
         - name: userId
           in: path
@@ -97,7 +97,7 @@ paths:
       tags:
         - User Details
       summary: v1 user details.
-      description: user details endpoint to test the api.
+      description: user details endpoint for UMR.
       parameters:
         - name: id
           in: path
@@ -117,6 +117,49 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserResponseDto'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
+  '/api/user/v1/{userId}/employment':
+    post:
+      tags:
+        - User Employment Update
+      summary: v1 user employment update.
+      description: user employment update endpoint for UMR.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/EmploymentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDto'
         '500':
           description: Internal Server Error
           content:
@@ -182,6 +225,41 @@ components:
           type: boolean
           readOnly: true
       additionalProperties: false
+    EmploymentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        company:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        logo:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        userId:
+          type: integer
+          format: int32
+        duration:
+          type: string
+          nullable: true
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectDto'
+          nullable: true
+      additionalProperties: false
     ProblemDetails:
       type: object
       properties:
@@ -202,6 +280,65 @@ components:
           type: string
           nullable: true
       additionalProperties: { }
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        employmentId:
+          type: integer
+          format: int32
+          nullable: true
+        userId:
+          type: integer
+          format: int32
+          nullable: true
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillDto'
+          nullable: true
+      additionalProperties: false
+    ResponseDto:
+      type: object
+      properties:
+        uri:
+          type: string
+          nullable: true
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseItemDto'
+          nullable: true
+      additionalProperties: false
+    ResponseItemDto:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ResponseStatus'
+        id:
+          type: integer
+          format: int32
+        keyIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/StringObjectKeyValuePair'
+          nullable: true
+      additionalProperties: false
+    ResponseStatus:
+      enum:
+        - Created
+        - Failed
+        - Skipped
+      type: string
     SkillDto:
       type: object
       properties:
@@ -218,6 +355,15 @@ components:
         effectiveDate:
           type: string
           format: date-time
+          nullable: true
+      additionalProperties: false
+    StringObjectKeyValuePair:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        value:
           nullable: true
       additionalProperties: false
     UserDto:
