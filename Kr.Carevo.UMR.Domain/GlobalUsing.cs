@@ -1,0 +1,1 @@
+global using Kr.Carevo.UMR.Domain.Dto;

@@ -12,7 +12,7 @@ public sealed class Employer : BaseEntity<Employer>, IAggregateRoot
     public ICollection<UserEmployer> UserEmployers { get; private set; } = [];
    
 
-    public void CreateEmployment(EmploymentDto dto)
+    public void CreateEmployer(EmploymentDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
@@ -30,7 +30,7 @@ public sealed class Employer : BaseEntity<Employer>, IAggregateRoot
             Url = dto.Url;
     }
 
-    public void UpdateEmployment(string company, DateTime startDate, DateTime? endDate, string? logo, string? url)
+    public void UpdateEmployer(string company, DateTime startDate, DateTime? endDate, string? logo, string? url)
     {
         if (string.IsNullOrWhiteSpace(company))
             throw new ArgumentException("Company is required.", nameof(company));
@@ -44,6 +44,24 @@ public sealed class Employer : BaseEntity<Employer>, IAggregateRoot
         Company = company;
         Logo = logo;
         Url = url;
+    }
+
+    public void updateUserEmployment(EmploymentDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+        if (string.IsNullOrWhiteSpace(dto.Company))
+            throw new ArgumentException("Company cannot be empty.", nameof(dto.Company));
+
+        if (dto.StartDate == default)
+            throw new ArgumentException("StartDate must be a valid date.", nameof(dto.StartDate));
+
+        if (dto.EndDate.HasValue && dto.EndDate.Value < dto.StartDate)
+            throw new ArgumentException("EndDate cannot be before StartDate.", nameof(dto.EndDate));
+
+        Company = dto.Company;
+        Logo = dto.Logo;
+        Url = dto.Url;
     }
 
 

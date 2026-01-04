@@ -413,4 +413,5 @@ ASALocalRun/
 Kr.Common
 */Migrations
 Kr.Carevo.UMR.Application/Common/
+.vscode/
 

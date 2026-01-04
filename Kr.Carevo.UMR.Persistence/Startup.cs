@@ -14,5 +14,6 @@ public static class Startup
          services.Configure<DbSettings>(configuration.GetSection("DataStore:Carevo"));
          services.DbNpgContextPoolSettings<CarevoDbContext>(configuration, "DataStore:Carevo");        
          services.AddScoped<IUserRepository, UserRepository>();
+         services.AddScoped<IEmploymentRepository, EmploymentRepository>();
     }
 }

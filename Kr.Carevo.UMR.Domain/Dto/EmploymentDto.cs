@@ -2,7 +2,7 @@ namespace Kr.Carevo.UMR.Domain.Dto;
 
 public sealed class EmploymentDto
 {
-    public int? Id { get; init; }
+    public int? Id { get; set; }
 
     public required string Company { get; set; }
 
@@ -14,7 +14,9 @@ public sealed class EmploymentDto
 
     public string? Url { get; set; }
 
-    public int UserId { get; init; }
+    public int UserId { get; set; }
+
+    public required string Duration { get; set;}
 
     public IEnumerable<ProjectDto> Projects { get; set; } = [];
 }

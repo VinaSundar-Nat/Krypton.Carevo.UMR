@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Security.Authentication;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Kr.Carevo.UMR.Application;
 using Kr.Carevo.UMR.Domain.Models.Infrastructure;
 using Kr.Common.Infrastructure.Logging;
@@ -11,12 +13,26 @@ public static class AppBuilder
 {
     public static void Setup(this WebApplicationBuilder builder)
     {
+        builder.Services.AddApiVersioning(options =>
+        {
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.ReportApiVersions = true;
+        });
+
+        builder.Services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
+
         builder.Services.AddHttpContextAccessor();
         Configuration(builder);
         builder.RegisterLogger();
         Host(builder);
         builder.Services.Register(builder.Configuration);
-        builder.Services.RegisterFeatures(builder.Configuration);     
+        builder.Services.RegisterFeatures(builder.Configuration);
     }
 
     private static void Configuration(WebApplicationBuilder builder)
@@ -36,7 +52,7 @@ public static class AppBuilder
             context.Configuration.GetSection(KerstalConfiguration.HostingOptions).Bind(hostConfig);
 
             ArgumentNullException.ThrowIfNull(hostConfig, nameof(hostConfig));
-          
+
 
             if (!hostConfig?.UseKerstal ?? false)
                 return;
@@ -72,7 +88,7 @@ public static class AppBuilder
                 listenOptions.Protocols = HttpProtocols.Http1;
             });
 
-            options.Limits.MaxRequestBodySize = 9703180;           
+            options.Limits.MaxRequestBodySize = 9703180;
             options.Configure();
         });
     }
