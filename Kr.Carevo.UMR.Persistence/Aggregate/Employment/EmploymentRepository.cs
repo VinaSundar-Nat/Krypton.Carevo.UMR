@@ -10,13 +10,20 @@ public sealed class EmploymentRepository(
     IMapper mapper)
     : BaseRepository<Employer>(logger, dbContext), IEmploymentRepository
 {
-    public async Task<IEnumerable<EmploymentDto>> GetByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<EmploymentResponseDto>> GetByUserIdAsync(int userId, CancellationToken cancellationToken = default)
     {
-        return await DBset
+        // TO DO : Refactor to optimize query and reduce data load - using split queries and filtering but still needs to be optimised
+        var employers = await DBset
             .AsNoTracking()
-            .Where(e => e.UserEmployers != null && e.UserEmployers.Any(ue => ue.UserId == userId))
-            .ProjectTo<EmploymentDto>(mapper.ConfigurationProvider)
+            .Include(e => e.UserEmployers.Where(ue => ue.UserId == userId))
+                .ThenInclude(ue => ue.Projects)
+                    .ThenInclude(p => p.Skills)
+                    .AsSplitQuery()
+            .Where(e => e.UserEmployers.Any(ue => ue.UserId == userId))
             .ToListAsync(cancellationToken);
+
+
+        return mapper.Map<IEnumerable<EmploymentResponseDto>>(employers);
     }
 
     public async Task<ResponseDto> CreateUserEmploymentsAsync(
@@ -24,10 +31,9 @@ public sealed class EmploymentRepository(
         IEnumerable<EmploymentDto> employments,
         CancellationToken cancellationToken = default)
     {
-        var inputList = employments.ToList();
         var results = new ResponseDto();
 
-        foreach (var dto in inputList)
+        foreach (var dto in employments)
         {
             var employer = await DBset
                 .AsNoTracking()
@@ -80,7 +86,6 @@ public sealed class EmploymentRepository(
         int userId,
         CancellationToken cancellationToken)
     {
-        // Check if this user is already linked to this employer
         var alreadyLinked = await DBset
             .Where(e => e.Id == existingEmployer.Id)
             .AnyAsync(e => e.UserEmployers.Any(ue => ue.UserId == userId), cancellationToken);
@@ -94,7 +99,6 @@ public sealed class EmploymentRepository(
             return null; 
         }
 
-        // Load the employer with its collection for modification
         var employer = await DBset
             .Include(e => e.UserEmployers)
             .FirstAsync(e => e.Id == existingEmployer.Id, cancellationToken);
