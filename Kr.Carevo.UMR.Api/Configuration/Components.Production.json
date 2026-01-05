@@ -1,11 +1,11 @@
 ﻿{
   "DataStore": {
     "Carevo": {
-      "Server": "localhost",
+      "Server": "${carevo.prod.db.server}",
       "Port": "5432",
       "UserName": "svccarevo",
       "Database": "carevo",
-      "Password": "$ccat0.Nest"
+      "Password": "${carevo.prod.db.password}"
     }
   }
 }

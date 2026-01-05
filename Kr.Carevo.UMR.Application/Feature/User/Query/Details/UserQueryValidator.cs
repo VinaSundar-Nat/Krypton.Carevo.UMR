@@ -6,7 +6,7 @@ public class UserDetailsQueryValidator : AbstractValidator<UserDetailsQuery>
 {
     public UserDetailsQueryValidator()
     {
-        RuleFor(x => x.Id).NotNull()
+        RuleFor(x => x.Id).NotNull().GreaterThan(0)
             .NotEmpty().WithMessage("User ID is required")
             .When(x => x.FilterMode == LookupMode.ById);
 
