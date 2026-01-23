@@ -13,14 +13,11 @@ public sealed class ApplicationStatusHistory : BaseEntity<ApplicationStatusHisto
     public int ApplicationId { get; set; }
     public Application? Application { get; set; }
 
-    public void CreateHistory(ApplicationStatus newStatus, ApplicationStatus? previousStatus = null, string? notes = null, string? reason = null, string? changedBy = null)
+    public void CreateHistory(ApplicationStatus newStatus, ApplicationStatus? previousStatus = null, string? notes = null, string? reason = null, string? changedBy = null, DateTime? statusChangeDate = null  )
     {
-        if (newStatus == previousStatus)
-            throw new ArgumentException("New status cannot be the same as previous status.", nameof(newStatus));
-
         Status = newStatus;
         PreviousStatus = previousStatus;
-        StatusChangedDate = DateTime.UtcNow;
+        StatusChangedDate = statusChangeDate ?? DateTime.UtcNow;
         Notes = notes;
         Reason = reason;
         ChangedBy = changedBy;

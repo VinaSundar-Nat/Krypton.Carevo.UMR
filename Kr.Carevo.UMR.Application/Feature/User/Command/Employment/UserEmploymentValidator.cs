@@ -13,7 +13,7 @@ public class UserEmploymentCommandValidator : AbstractValidator<UserEmploymentCo
 
         RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("User ID is required")
-            .GreaterThan(0).WithMessage("User ID must be greater than 0")
+            .GreaterThan(0).WithMessage("User ID is invalid.")
             .MustAsync(async (userId, cancellationToken) =>
             {
                 return await _userRepository.ExistsByIdAsync(userId, cancellationToken);

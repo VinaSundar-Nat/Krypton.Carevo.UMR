@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Feature/Application/" />
+    <Folder Include="Feature/Application/Command/" />
+    <Folder Include="Feature/Application/Command/Create/" />
+    <Folder Include="Feature/Application/Query/" />
+    <Folder Include="Feature/Application/Query/Fetch/" />
     <Folder Include="Mapper/" />
   </ItemGroup>
 

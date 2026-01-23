@@ -7,5 +7,6 @@ public static partial class ApiEndpoints
         var versionBuilder = app.NewVersionedApi();
         UserRegistrationEndpoints(app, versionBuilder);
         UserEmploymentEndpoints(app, versionBuilder);  
+        ApplicationEndpoints(app, versionBuilder);
     }
 }
