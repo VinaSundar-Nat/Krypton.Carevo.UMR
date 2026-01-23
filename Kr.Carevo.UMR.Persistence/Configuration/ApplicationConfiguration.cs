@@ -21,7 +21,7 @@ public sealed class ApplicationConfiguration : IEntityTypeConfiguration<Applicat
         builder.Property(a => a.CreatedBy).HasColumnType("varchar(500)").HasColumnName("CreatedBy")
             .IsRequired(false);
 
-        builder.Property(a => a.JobId).HasColumnType("integer").IsRequired();
+        builder.Property(a => a.JobId).HasColumnType("varchar(100)").IsRequired();
         builder.Property(a => a.Status).HasColumnType("varchar(50)").IsRequired();
         builder.Property(a => a.AppliedDate).HasColumnType("timestamptz").IsRequired();
         builder.Property(a => a.Notes).HasColumnType("varchar").IsRequired(false);

@@ -13,8 +13,8 @@ using NpgsqlTypes;
 namespace Kr.Carevo.UMR.Persistence.Migrations
 {
     [DbContext(typeof(CarevoDbContext))]
-    [Migration("20260102150949_UMRMigration_Initial_1_0_11_20260103020943")]
-    partial class UMRMigration_Initial_1_0_11_20260103020943
+    [Migration("20260123000701_UMRMigration_Initial_1_0_14_20260123110653")]
+    partial class UMRMigration_Initial_1_0_14_20260123110653
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,8 +68,9 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                         .HasColumnType("varchar(500)")
                         .HasColumnName("CreatedBy");
 
-                    b.Property<int>("JobId")
-                        .HasColumnType("integer");
+                    b.Property<string>("JobId")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("varchar");

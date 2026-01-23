@@ -11,7 +11,6 @@ public static class Startup
      public static void RegisterFeatures(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigurePersistence(configuration);
-        services.AddHttpContextAccessor();
         services.AddMediator([typeof(Startup).Assembly]);
         services.AddAutoMapper(cfg => 
         {

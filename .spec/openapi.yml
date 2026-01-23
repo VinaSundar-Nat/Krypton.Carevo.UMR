@@ -9,8 +9,6 @@ paths:
         - Healthcheck
       summary: v1 health check.
       description: verify the health of the application.
-      requestBody:
-        content: { }
       responses:
         '200':
           description: OK
@@ -57,7 +55,6 @@ paths:
         - name: userId
           in: path
           required: true
-          style: simple
           schema:
             type: integer
             format: int32
@@ -102,12 +99,9 @@ paths:
         - name: id
           in: path
           required: true
-          style: simple
           schema:
             type: integer
             format: int32
-      requestBody:
-        content: { }
       responses:
         '200':
           description: OK
@@ -141,7 +135,6 @@ paths:
         - name: userId
           in: path
           required: true
-          style: simple
           schema:
             type: integer
             format: int32
@@ -184,12 +177,9 @@ paths:
         - name: id
           in: path
           required: true
-          style: simple
           schema:
             type: integer
             format: int32
-      requestBody:
-        content: { }
       responses:
         '200':
           description: OK
@@ -213,9 +203,132 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
         - { }
+  /api/application/v1/register:
+    post:
+      tags:
+        - User Application Create
+      summary: v1 user application create.
+      description: user application create endpoint for UMR.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponseDtoApiSuccessResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
+  '/api/application/v1/{applicationId}/status':
+    put:
+      tags:
+        - Application Status Update
+      summary: v1 application status update.
+      description: application status update endpoint for UMR.
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-User-Id
+          in: header
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationStatusDto'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanApiSuccessResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
+  '/api/application/v1/{applicationId}':
+    get:
+      tags:
+        - Fetch Application By Id
+      summary: v1 fetch application by id.
+      description: fetch application by id endpoint for UMR.
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponseDto'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+        - { }
 components:
   schemas:
     AddressDto:
+      required:
+        - city
+        - country
+        - line1
+        - postCode
+        - state
       type: object
       properties:
         line1:
@@ -248,7 +361,114 @@ components:
           format: double
           nullable: true
       additionalProperties: false
+    ApplicationDto:
+      required:
+        - appliedDate
+        - jobId
+        - status
+        - userId
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+        jobId:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        appliedDate:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ApplicationResponseDto:
+      required:
+        - appliedDate
+        - id
+        - jobId
+        - status
+        - userId
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+        jobId:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        appliedDate:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int32
+        personalizedEmploymentData:
+          type: string
+          nullable: true
+        statusHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationStatusDto'
+          nullable: true
+      additionalProperties: false
+    ApplicationResponseDtoApiSuccessResponse:
+      required:
+        - data
+        - statusCode
+        - url
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        url:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/ApplicationResponseDto'
+      additionalProperties: false
+    ApplicationStatusDto:
+      type: object
+      properties:
+        status:
+          type: string
+          nullable: true
+        statusChangedDate:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BooleanApiSuccessResponse:
+      required:
+        - data
+        - statusCode
+        - url
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        url:
+          type: string
+          nullable: true
+        data:
+          type: boolean
+      additionalProperties: false
     ContactDto:
+      required:
+        - email
       type: object
       properties:
         email:
@@ -265,6 +485,9 @@ components:
           readOnly: true
       additionalProperties: false
     EmploymentDto:
+      required:
+        - company
+        - startDate
       type: object
       properties:
         company:
@@ -300,6 +523,10 @@ components:
           format: int32
       additionalProperties: false
     EmploymentResponseDto:
+      required:
+        - company
+        - id
+        - startDate
       type: object
       properties:
         company:
@@ -351,6 +578,9 @@ components:
           nullable: true
       additionalProperties: { }
     ProjectDto:
+      required:
+        - description
+        - title
       type: object
       properties:
         id:
@@ -390,6 +620,10 @@ components:
           nullable: true
       additionalProperties: false
     ResponseItemDto:
+      required:
+        - id
+        - keyIdentifiers
+        - status
       type: object
       properties:
         status:
@@ -410,6 +644,9 @@ components:
         - Skipped
       type: string
     SkillDto:
+      required:
+        - code
+        - description
       type: object
       properties:
         id:
@@ -437,6 +674,11 @@ components:
           nullable: true
       additionalProperties: false
     UserDto:
+      required:
+        - contact
+        - dob
+        - firstName
+        - lastName
       type: object
       properties:
         id:
@@ -458,6 +700,13 @@ components:
           $ref: '#/components/schemas/ContactDto'
       additionalProperties: false
     UserResponseDto:
+      required:
+        - contact
+        - dob
+        - firstName
+        - id
+        - lastName
+        - status
       type: object
       properties:
         id:

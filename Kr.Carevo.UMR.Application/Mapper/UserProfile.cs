@@ -65,5 +65,26 @@ public class UserProfile : Profile
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
             .ForMember(dest => dest.Description, opt => opt.Ignore())
             .ForMember(dest => dest.EffectiveDate, opt => opt.Ignore());
+
+        CreateMap<Kr.Carevo.UMR.Domain.Models.AggregateModels.Application, ApplicationResponseDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.JobId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.AppliedDate, opt => opt.MapFrom(src => src.AppliedDate))
+            .ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Notes))
+            .ForMember(dest => dest.PersonalizedEmploymentData, opt => opt.MapFrom(src => src.PersonalizedEmploymentData))
+            .ForMember(dest => dest.StatusHistory, opt => opt.MapFrom(src => src.StatusHistory.Select(h => new ApplicationStatusDto(
+                h.Status.ToString(),
+                h.StatusChangedDate,
+                h.Notes
+            ))));
+
+        CreateMap<ApplicationStatusHistory, ApplicationStatusDto>()
+            .ConstructUsing(src => new ApplicationStatusDto(
+                src.Status.ToString(),
+                src.StatusChangedDate,
+                src.Notes
+            ));
     }
 }

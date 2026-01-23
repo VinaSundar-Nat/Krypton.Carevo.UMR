@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace Kr.Carevo.UMR.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UMRMigration_Initial_1_0_11_20260103020943 : Migration
+    public partial class UMRMigration_Initial_1_0_14_20260123110653 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -149,7 +149,7 @@ namespace Kr.Carevo.UMR.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    JobId = table.Column<int>(type: "integer", nullable: false),
+                    JobId = table.Column<string>(type: "varchar(100)", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     AppliedDate = table.Column<DateTime>(type: "timestamptz", nullable: false),
                     Notes = table.Column<string>(type: "varchar", nullable: true),
