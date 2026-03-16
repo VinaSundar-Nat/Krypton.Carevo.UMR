@@ -10,7 +10,7 @@ This project follows a **Clean Architecture** pattern, enforcing a strict separa
 
 ![](.docs/clean_%20architecture.png)
 
-> *Diagram reference: [Clean Architecture with .NET — Chapter 1](https://learning.oreilly.com/library/view/clean-architecture-with/9780138203443/ch01.xhtml#ch01lev1sec3)*
+> *Diagram reference:(https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9780138203443/files/graphics/01fig09.jpg)*
 
 ### Layer Overview
 
