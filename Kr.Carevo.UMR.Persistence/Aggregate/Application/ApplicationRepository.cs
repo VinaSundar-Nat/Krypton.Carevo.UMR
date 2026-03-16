@@ -62,14 +62,8 @@ public sealed class ApplicationRepository(
         try
         {
             var application = await DBset
-                .FirstOrDefaultAsync(a => a.Id == applicationId && a.UserId == userId, cancellationToken);
-
-            if (application == null)
-            {
-                logger.LogWarning("Application {ApplicationId} not found for user {UserId}", applicationId, userId);
-                return false;
-            }
-
+                .FirstOrDefaultAsync(a => a.Id == applicationId && a.UserId == userId, cancellationToken) ?? throw new InvalidOperationException($"Application {applicationId} not found for user {userId}");
+            
             application.UpdateApplicationStatus(MapStatus(statusChange.Status), statusChange.Notes, statusChange.StatusChangedDate);
 
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -86,8 +80,6 @@ public sealed class ApplicationRepository(
         =>  status.ToLower() switch
         {
             "applied" => ApplicationStatus.Applied,
-            "pending" => ApplicationStatus.Applied,
-            "under review" => ApplicationStatus.UnderReview,
             "underreview" => ApplicationStatus.UnderReview,
             "shortlisted" => ApplicationStatus.Shortlisted,
             "interviewed" => ApplicationStatus.Interviewed,
