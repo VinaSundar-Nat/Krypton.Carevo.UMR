@@ -1,0 +1,9 @@
+<NsDepCopConfig IsEnabled="true" ChildCanDependOnParentImplicitly="true" CheckAssemblyDependencies="true">
+    <!-- Allow all namespace and assembly dependencies by default (denylist approach) -->
+    <Allowed From="*" To="*" />
+    <AllowedAssembly From="*" To="*" />
+
+    <!-- Api layer must not directly reference Infrastructure or Persistence layers -->
+    <Disallowed From="Kr.Carevo.UMR.Api.*" To="Kr.Carevo.UMR.Persistence.*" /> 
+    <Disallowed From="Kr.Carevo.UMR.Api.*" To="Kr.Carevo.UMR.Infrastructure.*" />  
+</NsDepCopConfig>
