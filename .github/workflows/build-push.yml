@@ -28,6 +28,7 @@ env:
 permissions:
   contents: read
   packages: write
+  security-events: write
 
 jobs:
   build-test-scan-push:
@@ -72,6 +73,17 @@ jobs:
           dotnet restore Kr.Carevo.UMR.Application/*.csproj
           dotnet restore Kr.Carevo.UMR.Api/*.csproj
           dotnet restore Tests/Kr.Carevo.UMR.UnitTests/*.csproj
+      
+      # Autobuild re-compiles with CodeQL instrumentation. The explicit
+      # dotnet build step below still runs so test binaries are available.
+      - name: CodeQL Security Scan
+        uses: ./.github/cicd-actions/actions/codeql-scan
+        with:
+          language: csharp
+          report-mode: "console,artifact"
+          exclude-paths: "**/Tests/**, **/Migrations/**"
+          continue-on-error: "true"
+          build-command: "dotnet build --configuration Release /p:GenerateOpenApi=false"
 
       - name: Build project
         run: dotnet build --configuration Release --no-restore /p:GenerateOpenApi=false 
