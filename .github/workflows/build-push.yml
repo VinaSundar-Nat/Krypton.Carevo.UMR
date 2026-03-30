@@ -83,6 +83,7 @@ jobs:
           report-mode: "console"
           exclude-paths: "**/Tests/**, **/Migrations/**"
           continue-on-error: "true"
+          build-command: "dotnet build --configuration Release /p:GenerateOpenApi=false"
 
       - name: Build project
         run: dotnet build --configuration Release --no-restore /p:GenerateOpenApi=false 
